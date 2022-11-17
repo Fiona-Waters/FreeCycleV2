@@ -59,4 +59,5 @@
     <string name="viewMap_button">View Map</string>
     <string name="edit_button">Edit</string>
     <string name="location_not_provided">Location Not Provided</string>
+    <string name="profile_image">Profile Image</string>
 </resources>
