@@ -60,4 +60,6 @@
     <string name="edit_button">Edit</string>
     <string name="location_not_provided">Location Not Provided</string>
     <string name="profile_image">Profile Image</string>
+    <string name="listingError">Error : Couldn\'t Add A Listing</string>
+
 </resources>
