@@ -3,11 +3,20 @@ package ie.wit.myapplication.ui.list
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import ie.wit.myapplication.models.FreecycleManager
+import ie.wit.myapplication.models.FreecycleModel
 
 class ListViewModel : ViewModel() {
 
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is home Fragment"
+    private val listings = MutableLiveData<List<FreecycleModel>>()
+    val observableListings: LiveData<List<FreecycleModel>>
+        get() = listings
+
+   init {
+       load()
+   }
+
+    fun load() {
+        listings.value = FreecycleManager.findAll()
     }
-    val text: LiveData<String> = _text
 }

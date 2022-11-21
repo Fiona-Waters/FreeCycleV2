@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import ie.wit.myapplication.R
 import ie.wit.myapplication.databinding.FragmentAddBinding
@@ -91,12 +92,14 @@ class AddFragment : Fragment() {
                     FreecycleModel(name = listing.name, contactNumber = listing.contactNumber, listingTitle = listing.listingTitle, listingDescription = listing.listingDescription,
                     itemAvailable = listing.itemAvailable, dateAvailable = listing.dateAvailable )
                 )
-                Timber.i("ADDING LISTING %v", listing)
+                // TODO how to close fragment/go to list and clear info from add
+                Timber.i("ADDING LISTING %s", listing)
             } else {
                 Snackbar.make(it, R.string.all_fields_required, Snackbar.LENGTH_LONG).show()
             }
         }
     }
+
 
     override fun onDestroyView() {
         super.onDestroyView()
