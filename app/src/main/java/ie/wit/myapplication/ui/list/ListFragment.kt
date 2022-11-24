@@ -19,6 +19,7 @@ import timber.log.Timber
 class ListFragment : Fragment(), FreecycleListener {
 
     private var _binding: FragmentListBinding? = null
+
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
@@ -36,32 +37,28 @@ class ListFragment : Fragment(), FreecycleListener {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val homeViewModel =
-            ViewModelProvider(this).get(ListViewModel::class.java)
-
         _binding = FragmentListBinding.inflate(inflater, container, false)
         binding.recyclerView.layoutManager = LinearLayoutManager(activity)
         listViewModel = ViewModelProvider(this).get(ListViewModel::class.java)
-        listViewModel.observableListings.observe(viewLifecycleOwner, Observer {
-                listings ->
-            listings?.let { render(listings)}
+        listViewModel.observableListings.observe(viewLifecycleOwner, Observer { listings ->
+            listings?.let { render(listings) }
         })
         return binding.root
     }
 
     private fun render(listings: List<FreecycleModel>) {
-        binding.recyclerView.adapter = FreecycleAdapter(listings,this)
+        binding.recyclerView.adapter = FreecycleAdapter(listings, this)
         if (listings.isEmpty()) {
             binding.recyclerView.visibility = View.GONE
-        //    binding.donationsNotFound.visibility = View.VISIBLE
+            //    binding.donationsNotFound.visibility = View.VISIBLE
         } else {
             binding.recyclerView.visibility = View.VISIBLE
-         //   binding.donationsNotFound.visibility = View.GONE
+            //   binding.donationsNotFound.visibility = View.GONE
         }
     }
 
     override fun onListingClick(listing: FreecycleModel) {
-        //TODO when listing is clicked go to view listing fragment!
+        //TODO when listing is clicked go to view listing fragment! have edit and delete option.
 //        val action = ListFragmentDirections.actionListFragmentToViewFragment(listing.id)
 //        findNavController().navigate(action)
     }

@@ -3,6 +3,7 @@ package ie.wit.myapplication.adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.squareup.picasso.Picasso
 import ie.wit.myapplication.databinding.CardFreecycleBinding
 import ie.wit.myapplication.models.FreecycleModel
 
@@ -36,7 +37,7 @@ class FreecycleAdapter constructor(
         fun bind(listing: FreecycleModel, listener: FreecycleListener) {
             binding.listingTitle.text = listing.listingTitle
             binding.name.text = listing.name
-        //TODO    Picasso.get().load(listing.image).resize(200, 200).into(binding.imageIcon)
+            Picasso.get().load(listing.image).resize(200, 200).into(binding.imageIcon)
             binding.root.setOnClickListener { listener.onListingClick(listing) }
         }
     }

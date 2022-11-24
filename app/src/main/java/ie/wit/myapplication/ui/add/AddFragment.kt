@@ -1,27 +1,34 @@
 package ie.wit.myapplication.ui.add
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.navigateUp
 import com.google.android.material.snackbar.Snackbar
+import com.squareup.picasso.Picasso
 import ie.wit.myapplication.R
 import ie.wit.myapplication.databinding.FragmentAddBinding
 import ie.wit.myapplication.main.MainApp
 import ie.wit.myapplication.models.FreecycleModel
+import ie.wit.myapplication.utils.showImagePicker
 import timber.log.Timber
 import java.time.LocalDate
 
 class AddFragment : Fragment() {
 
     private var _binding: FragmentAddBinding? = null
-    // TODO image intent launcher
+    private lateinit var imageIntentLauncher: ActivityResultLauncher<Intent>
     // TODO map intent launcher
     lateinit var app: MainApp
     private val binding get() = _binding!!
@@ -34,6 +41,7 @@ class AddFragment : Fragment() {
         app = MainApp()
         Timber.i("ON CREATE ADD FRAGMENT")
             //application as MainApp
+
     }
 
     override fun onCreateView(
@@ -45,6 +53,12 @@ class AddFragment : Fragment() {
 
         _binding = FragmentAddBinding.inflate(inflater, container, false)
         val root: View = binding.root
+
+        binding.chooseImage.setOnClickListener {
+            showImagePicker(imageIntentLauncher)
+        }
+        registerImagePickerCallback()
+
 
         addViewModel = ViewModelProvider(this).get(AddViewModel::class.java)
         addViewModel.observableStatus.observe(viewLifecycleOwner, Observer {
@@ -75,7 +89,7 @@ class AddFragment : Fragment() {
             listing.listingDescription = binding.listingDescription.text.toString()
             listing.itemAvailable = binding.toggleButton.isChecked
             val dateSelected = LocalDate.of(
-                binding.datePicker.year, binding.datePicker.month, binding.datePicker.dayOfMonth
+                binding.datePicker.year, binding.datePicker.month+1, binding.datePicker.dayOfMonth
             )
             listing.dateAvailable = dateSelected
 
@@ -90,9 +104,9 @@ class AddFragment : Fragment() {
 //                finish()
                 addViewModel.addListing(
                     FreecycleModel(name = listing.name, contactNumber = listing.contactNumber, listingTitle = listing.listingTitle, listingDescription = listing.listingDescription,
-                    itemAvailable = listing.itemAvailable, dateAvailable = listing.dateAvailable )
+                    image = listing.image, itemAvailable = listing.itemAvailable, dateAvailable = listing.dateAvailable )
                 )
-                // TODO how to close fragment/go to list and clear info from add
+                findNavController().navigateUp()
                 Timber.i("ADDING LISTING %s", listing)
             } else {
                 Snackbar.make(it, R.string.all_fields_required, Snackbar.LENGTH_LONG).show()
@@ -108,4 +122,21 @@ class AddFragment : Fragment() {
 
     // TODO override fun onResume() {
 
+    private fun registerImagePickerCallback() {
+        imageIntentLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                when (result.resultCode) {
+                    AppCompatActivity.RESULT_OK -> {
+                        if (result.data != null) {
+                            Timber.i("Got Result ${result.data!!.data}")
+                            listing.image = result.data!!.data!!
+                            Picasso.get().load(listing.image).into(binding.ListingImage)
+                            binding.chooseImage.setText(R.string.edit_image)
+                        } // end of if
+                    }
+                    AppCompatActivity.RESULT_CANCELED -> {}
+                    else -> {}
+                }
+            }
+    }
 }
