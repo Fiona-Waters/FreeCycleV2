@@ -12,7 +12,7 @@ interface FreecycleListener {
 }
 
 class FreecycleAdapter constructor(
-    private var listings: List<FreecycleModel>,
+    private var listings: ArrayList<FreecycleModel>,
     private val listener: FreecycleListener
 ) : RecyclerView.Adapter<FreecycleAdapter.MainHolder>() {
 
@@ -27,6 +27,11 @@ class FreecycleAdapter constructor(
         holder.bind(listing, listener)
     }
 
+    fun removeAt(position: Int) {
+        listings.removeAt(position)
+        notifyItemRemoved(position)
+    }
+
     override fun getItemCount(): Int = listings.size
 
 
@@ -37,7 +42,7 @@ class FreecycleAdapter constructor(
         fun bind(listing: FreecycleModel, listener: FreecycleListener) {
             binding.listingTitle.text = listing.listingTitle
             binding.name.text = listing.name
-            Picasso.get().load(listing.image).resize(200, 200).into(binding.imageIcon)
+        //    Picasso.get().load(listing.image).resize(200, 200).into(binding.imageIcon)
             binding.root.setOnClickListener { listener.onListingClick(listing) }
         }
     }

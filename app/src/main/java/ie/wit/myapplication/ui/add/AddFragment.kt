@@ -11,6 +11,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -21,6 +22,8 @@ import ie.wit.myapplication.R
 import ie.wit.myapplication.databinding.FragmentAddBinding
 import ie.wit.myapplication.main.MainApp
 import ie.wit.myapplication.models.FreecycleModel
+import ie.wit.myapplication.ui.auth.LoggedInViewModel
+import ie.wit.myapplication.ui.list.ListViewModel
 import ie.wit.myapplication.utils.showImagePicker
 import timber.log.Timber
 import java.time.LocalDate
@@ -29,19 +32,18 @@ class AddFragment : Fragment() {
 
     private var _binding: FragmentAddBinding? = null
     private lateinit var imageIntentLauncher: ActivityResultLauncher<Intent>
+
     // TODO map intent launcher
-    lateinit var app: MainApp
+    // lateinit var app: MainApp
     private val binding get() = _binding!!
     var listing = FreecycleModel()
     private lateinit var addViewModel: AddViewModel
+    private val listViewModel: ListViewModel by activityViewModels()
+    private val loggedInViewModel: LoggedInViewModel by activityViewModels()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        app = MainApp()
-        Timber.i("ON CREATE ADD FRAGMENT")
-            //application as MainApp
-
     }
 
     override fun onCreateView(
@@ -61,8 +63,8 @@ class AddFragment : Fragment() {
 
 
         addViewModel = ViewModelProvider(this).get(AddViewModel::class.java)
-        addViewModel.observableStatus.observe(viewLifecycleOwner, Observer {
-            status -> status?.let {render(status)}
+        addViewModel.observableStatus.observe(viewLifecycleOwner, Observer { status ->
+            status?.let { render(status) }
         })
         setButtonListener(binding)
         return root
@@ -76,7 +78,8 @@ class AddFragment : Fragment() {
                     //findNavController().popBackStack()
                 }
             }
-            false -> Toast.makeText(context,getString(R.string.listingError), Toast.LENGTH_LONG).show()
+            false -> Toast.makeText(context, getString(R.string.listingError), Toast.LENGTH_LONG)
+                .show()
         }
     }
 
@@ -89,7 +92,7 @@ class AddFragment : Fragment() {
             listing.listingDescription = binding.listingDescription.text.toString()
             listing.itemAvailable = binding.toggleButton.isChecked
             val dateSelected = LocalDate.of(
-                binding.datePicker.year, binding.datePicker.month+1, binding.datePicker.dayOfMonth
+                binding.datePicker.year, binding.datePicker.month + 1, binding.datePicker.dayOfMonth
             )
             listing.dateAvailable = dateSelected
 
@@ -102,18 +105,27 @@ class AddFragment : Fragment() {
 //                }
 //                setResult(AppCompatActivity.RESULT_OK, intent.putExtra("updated_listing", listing))
 //                finish()
+                Timber.i("FirebaseUser : ${loggedInViewModel.liveFirebaseUser}")
                 addViewModel.addListing(
-                    FreecycleModel(name = listing.name, contactNumber = listing.contactNumber, listingTitle = listing.listingTitle, listingDescription = listing.listingDescription,
-                    image = listing.image, itemAvailable = listing.itemAvailable, dateAvailable = listing.dateAvailable )
+                    loggedInViewModel.liveFirebaseUser,
+                    FreecycleModel(
+                        name = listing.name,
+                        contactNumber = listing.contactNumber,
+                        listingTitle = listing.listingTitle,
+                        listingDescription = listing.listingDescription,
+                     //   image = listing.image,
+                        itemAvailable = listing.itemAvailable,
+                        dateAvailable = listing.dateAvailable,
+                        email = loggedInViewModel.liveFirebaseUser.value?.email!!
+                    )
                 )
-                findNavController().navigateUp()
                 Timber.i("ADDING LISTING %s", listing)
+                findNavController().navigateUp()
             } else {
                 Snackbar.make(it, R.string.all_fields_required, Snackbar.LENGTH_LONG).show()
             }
         }
     }
-
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -129,8 +141,8 @@ class AddFragment : Fragment() {
                     AppCompatActivity.RESULT_OK -> {
                         if (result.data != null) {
                             Timber.i("Got Result ${result.data!!.data}")
-                            listing.image = result.data!!.data!!
-                            Picasso.get().load(listing.image).into(binding.ListingImage)
+                   //         listing.image = result.data!!.data!!
+                  //          Picasso.get().load(listing.image).into(binding.ListingImage)
                             binding.chooseImage.setText(R.string.edit_image)
                         } // end of if
                     }
