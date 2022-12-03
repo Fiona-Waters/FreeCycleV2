@@ -70,8 +70,6 @@ data class FreecycleModel(
     }
 }
 
-
-//
 //
 //
 //@Parcelize

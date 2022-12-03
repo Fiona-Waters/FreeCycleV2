@@ -97,14 +97,7 @@ class AddFragment : Fragment() {
             listing.dateAvailable = dateSelected
 
             if (listing.listingTitle.isNotEmpty() && listing.listingDescription.isNotEmpty() && listing.name.isNotEmpty()) {
-//                if (edit) {
-//                    app.listingsStore.update(listing.copy())
-//                } else {
-//                    app.listingsStore.create(listing.copy())
-//                    Timber.i("add Button Pressed: $listing")
-//                }
-//                setResult(AppCompatActivity.RESULT_OK, intent.putExtra("updated_listing", listing))
-//                finish()
+//
                 Timber.i("FirebaseUser : ${loggedInViewModel.liveFirebaseUser}")
                 addViewModel.addListing(
                     loggedInViewModel.liveFirebaseUser,
@@ -113,7 +106,7 @@ class AddFragment : Fragment() {
                         contactNumber = listing.contactNumber,
                         listingTitle = listing.listingTitle,
                         listingDescription = listing.listingDescription,
-                     //   image = listing.image,
+                        //   image = listing.image,
                         itemAvailable = listing.itemAvailable,
                         dateAvailable = listing.dateAvailable,
                         email = loggedInViewModel.liveFirebaseUser.value?.email!!
@@ -141,8 +134,8 @@ class AddFragment : Fragment() {
                     AppCompatActivity.RESULT_OK -> {
                         if (result.data != null) {
                             Timber.i("Got Result ${result.data!!.data}")
-                   //         listing.image = result.data!!.data!!
-                  //          Picasso.get().load(listing.image).into(binding.ListingImage)
+                            //         listing.image = result.data!!.data!!
+                            //          Picasso.get().load(listing.image).into(binding.ListingImage)
                             binding.chooseImage.setText(R.string.edit_image)
                         } // end of if
                     }

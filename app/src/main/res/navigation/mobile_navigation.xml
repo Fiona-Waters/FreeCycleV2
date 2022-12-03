@@ -14,8 +14,8 @@
             android:id="@+id/action_listFragment_to_addFragment"
             app:destination="@id/addFragment" />
         <action
-            android:id="@+id/action_listFragment_to_aboutFragment"
-            app:destination="@id/aboutFragment" />
+            android:id="@+id/action_listFragment_to_viewListingFragment"
+            app:destination="@id/viewListingFragment" />
     </fragment>
 
     <fragment
@@ -26,21 +26,26 @@
         <action
             android:id="@+id/action_addFragment_to_listFragment"
             app:destination="@id/listFragment" />
-        <action
-            android:id="@+id/action_addFragment_to_aboutFragment"
-            app:destination="@id/aboutFragment" />
     </fragment>
 
     <fragment
         android:id="@+id/aboutFragment"
         android:name="ie.wit.myapplication.ui.about.AboutFragment"
         android:label="@string/menu_about"
-        tools:layout="@layout/fragment_about" >
+        tools:layout="@layout/fragment_about" />
+
+    <fragment
+        android:id="@+id/viewListingFragment"
+        android:name="ie.wit.myapplication.ui.viewListing.ViewListingFragment"
+        android:label="View Listing"
+        tools:layout="@layout/fragment_view_listing">
         <action
-            android:id="@+id/action_aboutFragment_to_listFragment"
-            app:destination="@id/listFragment" />
-        <action
-            android:id="@+id/action_aboutFragment_to_addFragment"
-            app:destination="@id/addFragment" />
+            android:id="@+id/action_viewListingFragment_to_listFragment"
+            app:destination="@+id/listFragment"
+            />
+        <argument
+            android:name="listingid"
+            app:argType="string"
+            />
     </fragment>
 </navigation>

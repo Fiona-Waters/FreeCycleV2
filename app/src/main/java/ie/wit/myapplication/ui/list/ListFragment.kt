@@ -25,18 +25,15 @@ import timber.log.Timber
 class ListFragment : Fragment(), FreecycleListener {
 
     private var _binding: FragmentListBinding? = null
-
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
-    lateinit var app: MainApp
+
+    //  lateinit var app: MainApp
     private val listViewModel: ListViewModel by activityViewModels()
-    private val loggedInViewModel : LoggedInViewModel by activityViewModels()
+    private val loggedInViewModel: LoggedInViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Timber.i("ON CREATE LIST FRAGMENT")
-
     }
 
     override fun onCreateView(
@@ -47,9 +44,10 @@ class ListFragment : Fragment(), FreecycleListener {
         _binding = FragmentListBinding.inflate(inflater, container, false)
         val root = binding.root
         binding.recyclerView.layoutManager = LinearLayoutManager(activity)
-     //   listViewModel = ViewModelProvider(this).get(ListViewModel::class.java)
+        //   listViewModel = ViewModelProvider(this).get(ListViewModel::class.java)
         listViewModel.observableListings.observe(viewLifecycleOwner, Observer { listings ->
-            listings?.let { render(listings as ArrayList<FreecycleModel>)
+            listings?.let {
+                render(listings as ArrayList<FreecycleModel>)
                 checkSwipeRefresh()
             }
         })
@@ -58,17 +56,19 @@ class ListFragment : Fragment(), FreecycleListener {
 
         val swipeDeleteHandler = object : SwipeToDeleteCallback(requireContext()) {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-            //    showLoader(loader,"Deleting Donation")
+                //    showLoader(loader,"Deleting Donation")
                 val adapter = binding.recyclerView.adapter as FreecycleAdapter
                 adapter.removeAt(viewHolder.adapterPosition)
-                listViewModel.delete(listViewModel.liveFirebaseUser.value?.uid!!,
-                    (viewHolder.itemView.tag as FreecycleModel).uid!!)
-
-             //   hideLoader(loader)
+                listViewModel.delete(
+                    listViewModel.liveFirebaseUser.value?.uid!!,
+                    (viewHolder.itemView.tag as FreecycleModel).uid!!
+                )
+                //   hideLoader(loader)
             }
         }
         val itemTouchDeleteHelper = ItemTouchHelper(swipeDeleteHandler)
         itemTouchDeleteHelper.attachToRecyclerView(binding.recyclerView)
+
 
         val swipeEditHandler = object : SwipeToEditCallback(requireContext()) {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
@@ -93,15 +93,14 @@ class ListFragment : Fragment(), FreecycleListener {
     }
 
     override fun onListingClick(listing: FreecycleModel) {
-        //TODO when listing is clicked go to view listing fragment! have edit and delete option.
-//        val action = ListFragmentDirections.actionListFragmentToViewFragment(listing.uid!!)
-//        findNavController().navigate(action)
+        val action = ListFragmentDirections.actionListFragmentToViewListingFragment(listing.uid!!)
+        findNavController().navigate(action)
     }
 
     private fun setSwipeRefresh() {
         binding.swiperefresh.setOnRefreshListener {
             binding.swiperefresh.isRefreshing = true
-          //  showLoader(loader,"Downloading Donations")
+            //  showLoader(loader,"Downloading Donations")
             listViewModel.load()
         }
     }

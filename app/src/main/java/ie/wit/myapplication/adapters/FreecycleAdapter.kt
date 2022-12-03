@@ -40,6 +40,7 @@ class FreecycleAdapter constructor(
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(listing: FreecycleModel, listener: FreecycleListener) {
+            binding.root.tag = listing
             binding.listingTitle.text = listing.listingTitle
             binding.name.text = listing.name
         //    Picasso.get().load(listing.image).resize(200, 200).into(binding.imageIcon)

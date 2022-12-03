@@ -47,7 +47,13 @@ object FirebaseDBManager : FreecycleStore {
     ) {
         database.child("user-listings").child(userid)
             .child(listingid).get().addOnSuccessListener {
-                listing.value = it.getValue(FreecycleModel::class.java)
+
+                // listing.value = it.getValue(FreecycleModel::class.java)
+                val data = it.value as HashMap<String, Any?>
+                val l = FreecycleModel.fromMap(data!!)
+
+                listing.value = l
+
                 Timber.i("firebase Got value ${it.value}")
             }.addOnFailureListener {
                 Timber.e("firebase Error getting data $it")
