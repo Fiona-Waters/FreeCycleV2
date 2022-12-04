@@ -72,7 +72,7 @@ class ListFragment : Fragment(), FreecycleListener {
 
         val swipeEditHandler = object : SwipeToEditCallback(requireContext()) {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                onListingClick(viewHolder.itemView.tag as FreecycleModel)
+                onListingSwipeRight(viewHolder.itemView.tag as FreecycleModel)
             }
         }
         val itemTouchEditHelper = ItemTouchHelper(swipeEditHandler)
@@ -94,6 +94,11 @@ class ListFragment : Fragment(), FreecycleListener {
 
     override fun onListingClick(listing: FreecycleModel) {
         val action = ListFragmentDirections.actionListFragmentToViewListingFragment(listing.uid!!)
+        findNavController().navigate(action)
+    }
+
+    fun onListingSwipeRight(listing: FreecycleModel) {
+        val action = ListFragmentDirections.actionListFragmentToEditFragment(listing.uid!!)
         findNavController().navigate(action)
     }
 

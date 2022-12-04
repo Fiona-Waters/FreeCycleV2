@@ -42,6 +42,15 @@ class ViewListingFragment : Fragment() {
 
     private fun render() {
         binding.listingvm = viewListingViewModel
+
+        val available = "Available"
+        val unavailable = "Unavailable"
+        if(viewListingViewModel.observableListing.value?.itemAvailable == true)
+        {
+            binding.itemAvailability.text = available
+        } else {
+            binding.itemAvailability.text = unavailable
+        }
     }
 
     override fun onResume() {

@@ -106,7 +106,7 @@ class AddFragment : Fragment() {
                         contactNumber = listing.contactNumber,
                         listingTitle = listing.listingTitle,
                         listingDescription = listing.listingDescription,
-                        //   image = listing.image,
+                        image = listing.image,
                         itemAvailable = listing.itemAvailable,
                         dateAvailable = listing.dateAvailable,
                         email = loggedInViewModel.liveFirebaseUser.value?.email!!

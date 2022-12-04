@@ -16,6 +16,9 @@
         <action
             android:id="@+id/action_listFragment_to_viewListingFragment"
             app:destination="@id/viewListingFragment" />
+        <action
+            android:id="@+id/action_listFragment_to_editFragment"
+            app:destination="@id/editFragment" />
     </fragment>
 
     <fragment
@@ -43,6 +46,19 @@
             android:id="@+id/action_viewListingFragment_to_listFragment"
             app:destination="@+id/listFragment"
             />
+        <argument
+            android:name="listingid"
+            app:argType="string"
+            />
+    </fragment>
+    <fragment
+        android:id="@+id/editFragment"
+        android:name="ie.wit.myapplication.ui.edit.EditFragment"
+        android:label="Edit Listing"
+        tools:layout="@layout/fragment_edit" >
+        <action
+            android:id="@+id/action_editFragment_to_listFragment"
+            app:destination="@id/listFragment" />
         <argument
             android:name="listingid"
             app:argType="string"

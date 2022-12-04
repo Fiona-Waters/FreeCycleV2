@@ -39,6 +39,7 @@
     <string name="login_button">Login</string>
     <string name="signup">Sign Up</string>
     <string name="button_location">Set Location</string>
+    <string name="button_updateLocation">Update Location</string>
     <string name="date_available">Date Available</string>
     <string name="title_activity_map">MapActivity</string>
     <string name="menu_search">Search</string>

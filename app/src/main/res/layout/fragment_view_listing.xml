@@ -298,7 +298,6 @@
                                 android:layout_height="wrap_content"
                                 android:background="#FFFFFF"
                                 android:padding="17dip"
-                                android:text="@{listingvm.observableListing.itemAvailable == true ? "available" : "unavailable"}"
                                 android:textColor="#000"
                                 android:textSize="14sp" />
                         </TableRow>
