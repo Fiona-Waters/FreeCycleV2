@@ -14,6 +14,7 @@ class ListViewModel : ViewModel() {
     val observableListings: LiveData<List<FreecycleModel>>
         get() = listings
     val liveFirebaseUser = MutableLiveData<FirebaseUser>()
+    var readOnly = MutableLiveData(false)
 
     init {
         load()
@@ -22,11 +23,21 @@ class ListViewModel : ViewModel() {
     fun load() {
         try {
             //  FreecycleManager.findAll(LiveFirebaseUser.value?.email!!, listings)
-
+            readOnly.value = false
             FirebaseDBManager.findAll(liveFirebaseUser.value?.uid!!, listings)
             Timber.i("List Load Success : ${listings.value.toString()}")
         } catch (e: Exception) {
             Timber.i("List Load Error : ${e.message}")
+        }
+    }
+
+    fun loadAll() {
+        try {
+            readOnly.value = true
+            FirebaseDBManager.findAll(listings)
+            Timber.i("Report LoadAll Success : ${listings.value.toString()}")
+        } catch (e: Exception) {
+            Timber.i("Report LoadAll Error : ${e.message}")
         }
     }
 

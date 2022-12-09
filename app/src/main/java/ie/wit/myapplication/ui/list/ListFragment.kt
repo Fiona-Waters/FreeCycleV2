@@ -1,17 +1,22 @@
 package ie.wit.myapplication.ui.list
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import androidx.appcompat.widget.SwitchCompat
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.NavigationUI
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import ie.wit.myapplication.R
 import ie.wit.myapplication.adapters.FreecycleAdapter
 import ie.wit.myapplication.adapters.FreecycleListener
 import ie.wit.myapplication.databinding.FragmentListBinding
@@ -43,6 +48,7 @@ class ListFragment : Fragment(), FreecycleListener {
     ): View {
         _binding = FragmentListBinding.inflate(inflater, container, false)
         val root = binding.root
+        setupMenu()
         binding.recyclerView.layoutManager = LinearLayoutManager(activity)
         //   listViewModel = ViewModelProvider(this).get(ListViewModel::class.java)
         listViewModel.observableListings.observe(viewLifecycleOwner, Observer { listings ->
@@ -79,6 +85,33 @@ class ListFragment : Fragment(), FreecycleListener {
         itemTouchEditHelper.attachToRecyclerView(binding.recyclerView)
 
         return root
+    }
+
+    private fun setupMenu() {
+        (requireActivity() as MenuHost).addMenuProvider(object : MenuProvider {
+            override fun onPrepareMenu(menu: Menu) {
+                // TODO
+            }
+
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menuInflater.inflate(R.menu.menu_list, menu)
+
+                val item = menu.findItem(R.id.toggleListings) as MenuItem
+                item.setActionView(R.layout.togglebutton_layout)
+                val toggleListings: SwitchCompat = item.actionView!!.findViewById(R.id.toggleButton)
+                toggleListings.isChecked = false
+
+                toggleListings.setOnCheckedChangeListener { _, isChecked ->
+                    if(isChecked) listViewModel.loadAll()
+                    else listViewModel.load()
+
+                }
+            }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                return NavigationUI.onNavDestinationSelected(menuItem, requireView().findNavController())
+            }
+        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 
     private fun render(listings: ArrayList<FreecycleModel>) {

@@ -13,8 +13,27 @@ object FirebaseDBManager : FreecycleStore {
     var database: DatabaseReference = FirebaseDatabase.getInstance().reference
 
     override fun findAll(listings: MutableLiveData<List<FreecycleModel>>) {
-        TODO("Not yet implemented")
-    }
+        database.child("listings")
+            .addValueEventListener(object : ValueEventListener {
+                override fun onCancelled(error: DatabaseError) {
+                    Timber.i("Firebase Listing error : ${error.message}")
+                }
+
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val localList = ArrayList<FreecycleModel>()
+                    val children = snapshot.children
+                    children.forEach {
+                  //      val donation = it.getValue(FreecycleModel::class.java)
+                        val data = it.value as HashMap<String, Any?>
+                        val listing = FreecycleModel.fromMap(data!!)
+                        localList.add(listing!!)
+                    }
+                    database.child("donations")
+                        .removeEventListener(this)
+
+                    listings.value = localList
+                }
+            })    }
 
     override fun findAll(userid: String, listings: MutableLiveData<List<FreecycleModel>>) {
         database.child("user-listings").child(userid)

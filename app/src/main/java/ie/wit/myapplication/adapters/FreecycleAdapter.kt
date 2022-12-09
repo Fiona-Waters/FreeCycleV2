@@ -44,13 +44,6 @@ class FreecycleAdapter constructor(
             binding.listingTitle.text = listing.listingTitle
             binding.name.text = listing.name
         //    Picasso.get().load(listing.image).resize(200, 200).into(binding.imageIcon)
-            customTransformation()?.let {
-                Picasso.get().load(listing.profilePic.toUri())
-                    .resize(200,200)
-                    .transform(it)
-                    .centerCrop()
-                    .into(binding.imageIcon)
-            }
             binding.root.setOnClickListener { listener.onListingClick(listing) }
         }
     }

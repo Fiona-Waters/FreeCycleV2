@@ -5,7 +5,9 @@ import android.graphics.Color
 import android.view.animation.Transformation
 import android.widget.Toast
 import androidx.fragment.app.FragmentActivity
+import com.makeramen.roundedimageview.RoundedTransformationBuilder
 import ie.wit.myapplication.R
+import com.squareup.picasso.Picasso
 
 fun createLoader(activity: FragmentActivity) : AlertDialog {
     val loaderBuilder = AlertDialog.Builder(activity)
@@ -45,3 +47,12 @@ fun serviceAvailableMessage(activity: FragmentActivity) {
         Toast.LENGTH_LONG
     ).show()
 }
+
+fun customTransformation() : com.squareup.picasso.Transformation =
+    RoundedTransformationBuilder()
+        .borderColor(Color.WHITE)
+        .borderWidthDp(2F)
+        .cornerRadiusDp(35F)
+        .oval(false)
+        .build()
+

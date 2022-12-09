@@ -14,11 +14,13 @@ import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.google.firebase.auth.FirebaseUser
+import com.squareup.picasso.Picasso
 import ie.wit.myapplication.R
 import ie.wit.myapplication.ui.auth.LoggedInViewModel
 import ie.wit.myapplication.ui.auth.Login
 import ie.wit.myapplication.databinding.ActivityMainBinding
 import ie.wit.myapplication.databinding.NavHeaderMainBinding
+import ie.wit.myapplication.utils.customTransformation
 
 class Home : AppCompatActivity() {
 
@@ -71,6 +73,14 @@ class Home : AppCompatActivity() {
         navHeaderMainBinding = NavHeaderMainBinding.bind(headerView)
         navHeaderMainBinding.navHeaderEmail.text = currentUser.email
         navHeaderMainBinding.navHeaderName.text = currentUser.displayName
+        if(currentUser.photoUrl != null && currentUser.displayName != null) {
+            navHeaderMainBinding.navHeaderName.text = currentUser.displayName
+            Picasso.get().load(currentUser.photoUrl)
+                .resize(200, 200)
+                .transform(customTransformation())
+                .centerCrop()
+                .into(navHeaderMainBinding.navHeaderImage)
+        }
     }
 
     override fun onSupportNavigateUp(): Boolean {
