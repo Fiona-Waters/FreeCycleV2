@@ -1,13 +1,20 @@
 package ie.wit.myapplication.ui.edit
 
+import android.graphics.Bitmap
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import ie.wit.myapplication.firebase.FirebaseDBManager
 import ie.wit.myapplication.models.FreecycleModel
+import ie.wit.myapplication.utils.readImageFromPath
 import timber.log.Timber
+import java.io.ByteArrayOutputStream
+import java.io.File
+import android.content.Context
 
-class EditViewModel : ViewModel() {
+
+
+class EditViewModel(val context: Context)  : ViewModel() {
     private val listing = MutableLiveData<FreecycleModel>()
 
     var observableListing: LiveData<FreecycleModel>

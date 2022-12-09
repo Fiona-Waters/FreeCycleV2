@@ -28,7 +28,7 @@ class EditFragment : Fragment() {
         _binding = FragmentEditBinding.inflate(inflater, container, false)
         val root = binding.root
 
-        editViewModel = ViewModelProvider(this)[EditViewModel::class.java]
+        editViewModel = ViewModelProvider(this).get(EditViewModel::class.java)
         editViewModel.observableListing.observe(viewLifecycleOwner) { render() }
 
         binding.btnUpdate.setOnClickListener {

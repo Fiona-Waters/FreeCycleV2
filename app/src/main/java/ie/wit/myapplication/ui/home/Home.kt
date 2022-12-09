@@ -70,6 +70,7 @@ class Home : AppCompatActivity() {
         var headerView = homeBinding.navView.getHeaderView(0)
         navHeaderMainBinding = NavHeaderMainBinding.bind(headerView)
         navHeaderMainBinding.navHeaderEmail.text = currentUser.email
+        navHeaderMainBinding.navHeaderName.text = currentUser.displayName
     }
 
     override fun onSupportNavigateUp(): Boolean {

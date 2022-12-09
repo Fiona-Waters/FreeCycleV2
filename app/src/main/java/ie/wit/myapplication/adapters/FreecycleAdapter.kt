@@ -2,10 +2,12 @@ package ie.wit.myapplication.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.net.toUri
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import ie.wit.myapplication.databinding.CardFreecycleBinding
 import ie.wit.myapplication.models.FreecycleModel
+import ie.wit.myapplication.utils.customTransformation
 
 interface FreecycleListener {
     fun onListingClick(listing: FreecycleModel)
@@ -34,8 +36,6 @@ class FreecycleAdapter constructor(
 
     override fun getItemCount(): Int = listings.size
 
-
-    // todo start below
     inner class MainHolder(private val binding : CardFreecycleBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
@@ -44,6 +44,13 @@ class FreecycleAdapter constructor(
             binding.listingTitle.text = listing.listingTitle
             binding.name.text = listing.name
         //    Picasso.get().load(listing.image).resize(200, 200).into(binding.imageIcon)
+            customTransformation()?.let {
+                Picasso.get().load(listing.profilePic.toUri())
+                    .resize(200,200)
+                    .transform(it)
+                    .centerCrop()
+                    .into(binding.imageIcon)
+            }
             binding.root.setOnClickListener { listener.onListingClick(listing) }
         }
     }

@@ -20,13 +20,14 @@ data class FreecycleModel(
     var contactNumber: String = "",
     var listingTitle: String = "",
     var listingDescription: String = "",
-    var image: String = "",
+  //  var image: String = "",
     var lat: Long? = 0,
     var lng: Long? = 0,
     var zoom: Float? = 0f,
     var itemAvailable: Boolean = true,
     var dateAvailable: LocalDate = LocalDate.now(),
-    var email: String? = "joe@bloggs.com"
+    var email: String? = "joe@bloggs.com",
+    var profilePic: String = ""
 ) : Parcelable {
 
 
@@ -38,14 +39,15 @@ data class FreecycleModel(
             "contactNumber" to contactNumber,
             "listingTitle" to listingTitle,
             "listingDescription" to listingDescription,
-            "image" to image,
+        //    "image" to image,
             "lat" to lat,
             "lng" to lng,
             "zoom" to zoom,
             "itemAvailable" to itemAvailable,
             "dateAvailable" to dateAvailable.atStartOfDay(ZoneId.systemDefault()).toInstant()
                 .toEpochMilli(),
-            "email" to email
+            "email" to email,
+            "profilePic" to profilePic
         )
     }
 
@@ -58,14 +60,15 @@ data class FreecycleModel(
                 contactNumber = map["contactNumber"].toString(),
                 listingTitle = map["listingTitle"].toString(),
                 listingDescription = map["listingDescription"].toString(),
-                image = map["image"].toString(),
+             //   image = map["image"].toString(),
                 lat = map["lat"] as? Long,
                 lng = map["lng"] as? Long,
                 zoom = map["zoom"] as? Float,
                 itemAvailable = map["itemAvailable"] as Boolean,
                 dateAvailable = Instant.ofEpochMilli(map["dateAvailable"] as Long)
                     .atZone(ZoneId.systemDefault()).toLocalDate(),
-                email = map["email"].toString()
+                email = map["email"].toString(),
+                profilePic = map["profilePic"].toString()
             )
         }
     }

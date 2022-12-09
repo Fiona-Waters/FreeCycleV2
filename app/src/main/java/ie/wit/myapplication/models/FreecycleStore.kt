@@ -27,4 +27,6 @@ interface FreecycleStore {
     fun create(firebaseUser: MutableLiveData<FirebaseUser>, listing: FreecycleModel)
     fun delete(userid: String, listingid: String)
     fun update(userid: String, listingid: String, listing: FreecycleModel)
+
+
 }

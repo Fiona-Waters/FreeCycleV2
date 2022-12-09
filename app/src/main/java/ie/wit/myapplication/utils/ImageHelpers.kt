@@ -1,7 +1,14 @@
 package ie.wit.myapplication.utils
 
+import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.Color
+import android.net.Uri
+import android.view.animation.Transformation
 import androidx.activity.result.ActivityResultLauncher
+import com.makeramen.roundedimageview.RoundedTransformationBuilder
 import ie.wit.myapplication.R
 
 fun showImagePicker(intentLauncher: ActivityResultLauncher<Intent>) {
@@ -10,3 +17,27 @@ fun showImagePicker(intentLauncher: ActivityResultLauncher<Intent>) {
     chooseFile = Intent.createChooser(chooseFile, R.string.select_listing_image.toString())
     intentLauncher.launch(chooseFile)
 }
+
+fun readImageFromPath(context: Context, path: String) : Bitmap? {
+    var bitmap : Bitmap? = null
+    val uri = Uri.parse(path)
+
+    if(uri != null) {
+        try{
+            val parcelFileDescriptor = context.getContentResolver().openFileDescriptor(uri, "r")
+            val fileDescriptor = parcelFileDescriptor?.getFileDescriptor()
+            bitmap = BitmapFactory.decodeFileDescriptor(fileDescriptor)
+            parcelFileDescriptor?.close()
+        } catch (e: Exception){
+        }
+    }
+    return bitmap
+}
+
+
+fun customTransformation() : com.squareup.picasso.Transformation? =
+    RoundedTransformationBuilder()
+        .borderColor(Color.WHITE)
+        .borderWidthDp(2F)
+        .oval(false)
+        .build()
