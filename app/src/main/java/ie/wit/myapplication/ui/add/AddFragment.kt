@@ -22,6 +22,7 @@ import ie.wit.myapplication.R
 import ie.wit.myapplication.databinding.FragmentAddBinding
 import ie.wit.myapplication.main.MainApp
 import ie.wit.myapplication.models.FreecycleModel
+import ie.wit.myapplication.models.Location
 import ie.wit.myapplication.ui.auth.LoggedInViewModel
 import ie.wit.myapplication.ui.list.ListViewModel
 import ie.wit.myapplication.utils.showImagePicker
@@ -56,6 +57,19 @@ class AddFragment : Fragment() {
         _binding = FragmentAddBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
+        binding.pickupLocation.setOnClickListener{
+            val location = Location(52.24, -7.13, 15f)
+//            if (listing.zoom != 0f) {
+//                location.lat = listing.lat
+//                location.lng = listing.lng
+//                location.zoom = listing.zoom
+//            }
+            val action = AddFragmentDirections.actionAddFragmentToMapFragment()
+            findNavController().navigate(action)
+//            val launcherIntent =
+//                Intent(this, MapActivity::class.java).putExtra("location", location)
+//            mapIntentLauncher.launch(launcherIntent)
+        }
         binding.chooseImage.setOnClickListener {
             showImagePicker(imageIntentLauncher)
         }

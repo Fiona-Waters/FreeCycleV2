@@ -21,13 +21,14 @@ data class FreecycleModel(
     var listingTitle: String = "",
     var listingDescription: String = "",
   //  var image: String = "",
-    var lat: Long? = 0,
-    var lng: Long? = 0,
-    var zoom: Float? = 0f,
+//    var lat: Double = 0.0,
+//    var lng: Double = 0.0,
+//    var zoom: Float = 0f,
     var itemAvailable: Boolean = true,
     var dateAvailable: LocalDate = LocalDate.now(),
     var email: String? = "joe@bloggs.com",
-    var profilePic: String? = ""
+    var profilePic: String? = "",
+    var location : Location? = Location()
 ) : Parcelable {
 
 
@@ -40,9 +41,10 @@ data class FreecycleModel(
             "listingTitle" to listingTitle,
             "listingDescription" to listingDescription,
         //    "image" to image,
-            "lat" to lat,
-            "lng" to lng,
-            "zoom" to zoom,
+            "location" to location,
+//            "lat" to lat,
+//            "lng" to lng,
+//            "zoom" to zoom,
             "itemAvailable" to itemAvailable,
             "dateAvailable" to dateAvailable.atStartOfDay(ZoneId.systemDefault()).toInstant()
                 .toEpochMilli(),
@@ -60,10 +62,11 @@ data class FreecycleModel(
                 contactNumber = map["contactNumber"].toString(),
                 listingTitle = map["listingTitle"].toString(),
                 listingDescription = map["listingDescription"].toString(),
+                location = map["location"] as? Location,
              //   image = map["image"].toString(),
-                lat = map["lat"] as? Long,
-                lng = map["lng"] as? Long,
-                zoom = map["zoom"] as? Float,
+//                lat = map["lat"] as Double,
+//                lng = map["lng"] as Double,
+//                zoom = map["zoom"] as Float,
                 itemAvailable = map["itemAvailable"] as Boolean,
                 dateAvailable = Instant.ofEpochMilli(map["dateAvailable"] as Long)
                     .atZone(ZoneId.systemDefault()).toLocalDate(),
@@ -74,11 +77,9 @@ data class FreecycleModel(
     }
 }
 
-//
-//
-//@Parcelize
-//data class Location(
-//    var lat: Double = 0.0,
-//    var lng: Double = 0.0,
-//    var zoom: Float = 0f
-//) : Parcelable
+@Parcelize
+data class Location(
+    var lat: Double = 0.0,
+    var lng: Double = 0.0,
+    var zoom: Float = 0f
+) : Parcelable
