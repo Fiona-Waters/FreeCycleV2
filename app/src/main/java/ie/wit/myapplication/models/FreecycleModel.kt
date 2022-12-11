@@ -27,7 +27,7 @@ data class FreecycleModel(
     var itemAvailable: Boolean = true,
     var dateAvailable: LocalDate = LocalDate.now(),
     var email: String? = "joe@bloggs.com",
-    var profilePic: String = ""
+    var profilePic: String? = ""
 ) : Parcelable {
 
 

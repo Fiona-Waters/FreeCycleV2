@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import ie.wit.myapplication.databinding.FragmentEditBinding
@@ -29,7 +30,7 @@ class EditFragment : Fragment() {
         val root = binding.root
 
         editViewModel = ViewModelProvider(this).get(EditViewModel::class.java)
-        editViewModel.observableListing.observe(viewLifecycleOwner) { render() }
+        editViewModel.observableListing.observe(viewLifecycleOwner, Observer { render() })
 
         binding.btnUpdate.setOnClickListener {
             val updatedListing = binding.listingvm?.observableListing!!.value!!

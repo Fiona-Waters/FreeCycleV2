@@ -56,7 +56,6 @@ class ViewListingFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         viewListingViewModel.getListing(
-            loggedInViewModel.liveFirebaseUser.value?.uid!!,
             args.listingid
         )
     }

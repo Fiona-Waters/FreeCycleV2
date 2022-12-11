@@ -24,6 +24,11 @@ interface FreecycleStore {
         listing: MutableLiveData<FreecycleModel>
     )
 
+    fun findById(
+        listingid: String,
+        listing: MutableLiveData<FreecycleModel>
+    )
+
     fun create(firebaseUser: MutableLiveData<FirebaseUser>, listing: FreecycleModel)
     fun delete(userid: String, listingid: String)
     fun update(userid: String, listingid: String, listing: FreecycleModel)

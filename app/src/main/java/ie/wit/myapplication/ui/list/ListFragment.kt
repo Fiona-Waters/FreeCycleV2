@@ -115,7 +115,7 @@ class ListFragment : Fragment(), FreecycleListener {
     }
 
     private fun render(listings: ArrayList<FreecycleModel>) {
-        binding.recyclerView.adapter = FreecycleAdapter(listings, this)
+        binding.recyclerView.adapter = FreecycleAdapter(listings, this, listViewModel.readOnly.value!!)
         if (listings.isEmpty()) {
             binding.recyclerView.visibility = View.GONE
             //    binding.donationsNotFound.visibility = View.VISIBLE
@@ -139,7 +139,10 @@ class ListFragment : Fragment(), FreecycleListener {
         binding.swiperefresh.setOnRefreshListener {
             binding.swiperefresh.isRefreshing = true
             //  showLoader(loader,"Downloading Donations")
-            listViewModel.load()
+            if(listViewModel.readOnly.value!!)
+                listViewModel.loadAll()
+            else
+                listViewModel.load()
         }
     }
 

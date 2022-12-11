@@ -17,9 +17,9 @@ class ViewListingViewModel : ViewModel() {
             listing.value = value.value
         }
 
-    fun getListing(userid: String, id: String) {
+    fun getListing(id: String) {
         try {
-            FirebaseDBManager.findById(userid, id, listing)
+            FirebaseDBManager.findById(id, listing)
             Timber.i("ViewListing getListing() success : ${listing.value.toString()}")
         } catch (e: Exception) {
             Timber.i("ViewListing getListing() error : ${e.message}")
