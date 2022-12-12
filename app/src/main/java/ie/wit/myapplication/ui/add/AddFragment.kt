@@ -58,13 +58,13 @@ class AddFragment : Fragment() {
         val root: View = binding.root
 
         binding.pickupLocation.setOnClickListener{
-            val location = Location(52.24, -7.13, 15f)
-//            if (listing.zoom != 0f) {
-//                location.lat = listing.lat
-//                location.lng = listing.lng
-//                location.zoom = listing.zoom
-//            }
-            val action = AddFragmentDirections.actionAddFragmentToMapFragment()
+            val location = Location(52.245696, -7.139102, 15f)
+            if (listing.location?.zoom!! != 0f) {
+                location.lat = listing.location?.lat!!
+                location.lng = listing.location?.lng!!
+                location.zoom = listing.location?.zoom!!
+            }
+            val action = AddFragmentDirections.actionAddFragmentToMapFragment(location)
             findNavController().navigate(action)
 //            val launcherIntent =
 //                Intent(this, MapActivity::class.java).putExtra("location", location)

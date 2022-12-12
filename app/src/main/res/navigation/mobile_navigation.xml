@@ -76,8 +76,12 @@
     <fragment
         android:id="@+id/mapFragment"
         android:name="ie.wit.myapplication.ui.map.MapFragment"
-        android:label="fragment_map"
+        android:label="Map - Listing Location"
         tools:layout="@layout/fragment_map" >
+        <argument
+            android:name="location"
+            app:argType="ie.wit.myapplication.models.Location"
+            />
         <action
             android:id="@+id/action_mapFragment_to_addFragment"
             app:destination="@id/addFragment" />

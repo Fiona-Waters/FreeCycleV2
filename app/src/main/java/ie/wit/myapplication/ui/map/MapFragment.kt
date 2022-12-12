@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil.setContentView
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -14,17 +15,17 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import ie.wit.myapplication.R
+import ie.wit.myapplication.databinding.FragmentMapBinding
 import ie.wit.myapplication.models.Location
 
-/**
- * A simple [Fragment] subclass.
- * Use the [MapFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerDragListener, GoogleMap.OnMarkerClickListener {
+class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerDragListener,
+    GoogleMap.OnMarkerClickListener {
+
+    private var _binding: FragmentMapBinding? = null
+    private val binding get() = _binding!!
 
     private lateinit var mapViewModel: MapViewModel
-    private lateinit var map : GoogleMap
+    private lateinit var map: GoogleMap
     private var mapReady = false
     var location = Location()
 
@@ -32,15 +33,18 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerDragListen
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        _binding = FragmentMapBinding.inflate(inflater, container, false)
+        val root = binding.root
         mapViewModel = ViewModelProvider(this).get(MapViewModel::class.java)
-        val root = inflater.inflate(R.layout.fragment_map, container, false)
-        val mapFragment = childFragmentManager.findFragmentById(R.id.mapFragment) as SupportMapFragment
-        mapFragment.getMapAsync {
-            googleMap -> map = googleMap
+        //    val root = inflater.inflate(R.layout.fragment_map, container, false)
+        val mapFragment =
+            childFragmentManager.findFragmentById(R.id.mapFragment) as SupportMapFragment
+        mapFragment.getMapAsync { googleMap ->
+         //   addMarkers(googleMap)
+            map = googleMap
             mapReady = true
-
+            onMapReady(map)
         }
-
         return root
     }
 
@@ -56,22 +60,36 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerDragListen
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(loc, location.zoom))
         map.setOnMarkerDragListener(this)
         map.setOnMarkerClickListener(this)
-
     }
 
-    override fun onMarkerDrag(p0: Marker) {
-        TODO("Not yet implemented")
+    override fun onMarkerDrag(marker: Marker) {
     }
 
-    override fun onMarkerDragEnd(p0: Marker) {
-        TODO("Not yet implemented")
+    override fun onMarkerDragEnd(marker: Marker) {
+        location.lat = marker.position.latitude
+        location.lng = marker.position.longitude
+        location.zoom = map.cameraPosition.zoom
     }
 
-    override fun onMarkerDragStart(p0: Marker) {
-        TODO("Not yet implemented")
+    override fun onMarkerDragStart(marker: Marker) {
     }
 
-    override fun onMarkerClick(p0: Marker): Boolean {
-        TODO("Not yet implemented")
+    override fun onMarkerClick(marker: Marker): Boolean {
+        val loc = LatLng(location.lat, location.lng)
+        marker.snippet = "GPS : $loc"
+        return false
     }
+
+//    private fun addMarkers(googleMap: GoogleMap) {
+//        val loc = LatLng(52.245696, -7.139102)
+//        googleMap.addMarker(MarkerOptions().title("You are here").position(loc))
+//    }
+
+//    override fun onBackPressed() {
+//        val resultIntent = Intent()
+//        resultIntent.putExtra("location", location)
+//        setResult(Activity.RESULT_OK, resultIntent)
+//        finish()
+//        super.onBackPressed()
+//    }
 }
