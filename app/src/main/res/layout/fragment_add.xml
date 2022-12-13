@@ -58,7 +58,7 @@
                     android:layout_margin="8dp"
                     android:autofillHints=""
                     android:hint="@string/hint_listingContactNumber"
-                    android:inputType="text"
+                    android:inputType="phone"
                     android:maxLength="15"
                     android:maxLines="1"
                     android:padding="8dp"

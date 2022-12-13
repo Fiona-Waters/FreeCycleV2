@@ -58,6 +58,7 @@ class AddFragment : Fragment() {
         val root: View = binding.root
 
         binding.pickupLocation.setOnClickListener{
+            Timber.i("set location pressed")
             val location = Location(52.245696, -7.139102, 15f)
             if (listing.location?.zoom!! != 0f) {
                 location.lat = listing.location?.lat!!
@@ -66,6 +67,7 @@ class AddFragment : Fragment() {
             }
             val action = AddFragmentDirections.actionAddFragmentToMapFragment(location)
             findNavController().navigate(action)
+
 //            val launcherIntent =
 //                Intent(this, MapActivity::class.java).putExtra("location", location)
 //            mapIntentLauncher.launch(launcherIntent)
@@ -74,7 +76,6 @@ class AddFragment : Fragment() {
             showImagePicker(imageIntentLauncher)
         }
         registerImagePickerCallback()
-
 
         addViewModel = ViewModelProvider(this).get(AddViewModel::class.java)
         addViewModel.observableStatus.observe(viewLifecycleOwner, Observer { status ->
@@ -123,7 +124,7 @@ class AddFragment : Fragment() {
              //           image = listing.image,
                         itemAvailable = listing.itemAvailable,
                         dateAvailable = listing.dateAvailable,
-                        email = loggedInViewModel.liveFirebaseUser.value?.email!!
+                        email = loggedInViewModel.liveFirebaseUser.value?.email!!,
                     )
                 )
                 Timber.i("ADDING LISTING %s", listing)
@@ -137,6 +138,11 @@ class AddFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onResume() {
+        super.onResume()
+
     }
 
     // TODO override fun onResume() {

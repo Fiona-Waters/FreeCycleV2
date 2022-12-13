@@ -6,7 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil.setContentView
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.navArgs
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -28,6 +30,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerDragListen
     private lateinit var map: GoogleMap
     private var mapReady = false
     var location = Location()
+    private val args by navArgs<MapFragmentArgs>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,7 +39,9 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerDragListen
         _binding = FragmentMapBinding.inflate(inflater, container, false)
         val root = binding.root
         mapViewModel = ViewModelProvider(this).get(MapViewModel::class.java)
+    //q    mapViewModel.observableLocation.observe(viewLifecycleOwner, Observer { })
         //    val root = inflater.inflate(R.layout.fragment_map, container, false)
+      //  location = args.location
         val mapFragment =
             childFragmentManager.findFragmentById(R.id.mapFragment) as SupportMapFragment
         mapFragment.getMapAsync { googleMap ->
@@ -50,14 +55,14 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerDragListen
 
     override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap
-        val loc = LatLng(location.lat, location.lng)
+        val loc = LatLng(args.location.lat, args.location.lng)
         val options = MarkerOptions()
             .title("Listing")
             .snippet("GPS : $loc")
             .draggable(true)
             .position(loc)
         map.addMarker(options)
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(loc, location.zoom))
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(loc, args.location.zoom))
         map.setOnMarkerDragListener(this)
         map.setOnMarkerClickListener(this)
     }

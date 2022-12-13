@@ -1,29 +1,20 @@
 package ie.wit.myapplication.models
 
-import android.net.Uri
 import android.os.Parcelable
 import com.google.firebase.database.Exclude
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ServerValue
 import kotlinx.parcelize.Parcelize
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
-import java.time.ZoneOffset
-
 
 @Parcelize
 data class FreecycleModel(
     var uid: String? = "",
-    //  var userId: Long = 0,
     var name: String = "",
     var contactNumber: String = "",
     var listingTitle: String = "",
     var listingDescription: String = "",
   //  var image: String = "",
-//    var lat: Double = 0.0,
-//    var lng: Double = 0.0,
-//    var zoom: Float = 0f,
     var itemAvailable: Boolean = true,
     var dateAvailable: LocalDate = LocalDate.now(),
     var email: String? = "joe@bloggs.com",
@@ -40,11 +31,7 @@ data class FreecycleModel(
             "contactNumber" to contactNumber,
             "listingTitle" to listingTitle,
             "listingDescription" to listingDescription,
-        //    "image" to image,
             "location" to location,
-//            "lat" to lat,
-//            "lng" to lng,
-//            "zoom" to zoom,
             "itemAvailable" to itemAvailable,
             "dateAvailable" to dateAvailable.atStartOfDay(ZoneId.systemDefault()).toInstant()
                 .toEpochMilli(),
@@ -64,9 +51,6 @@ data class FreecycleModel(
                 listingDescription = map["listingDescription"].toString(),
                 location = map["location"] as? Location,
              //   image = map["image"].toString(),
-//                lat = map["lat"] as Double,
-//                lng = map["lng"] as Double,
-//                zoom = map["zoom"] as Float,
                 itemAvailable = map["itemAvailable"] as Boolean,
                 dateAvailable = Instant.ofEpochMilli(map["dateAvailable"] as Long)
                     .atZone(ZoneId.systemDefault()).toLocalDate(),
