@@ -10,17 +10,13 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.navigateUp
 import com.google.android.material.snackbar.Snackbar
-import com.squareup.picasso.Picasso
 import ie.wit.myapplication.R
 import ie.wit.myapplication.databinding.FragmentAddBinding
-import ie.wit.myapplication.main.MainApp
 import ie.wit.myapplication.models.FreecycleModel
 import ie.wit.myapplication.models.Location
 import ie.wit.myapplication.ui.auth.LoggedInViewModel
@@ -121,10 +117,12 @@ class AddFragment : Fragment() {
                         contactNumber = listing.contactNumber,
                         listingTitle = listing.listingTitle,
                         listingDescription = listing.listingDescription,
-             //           image = listing.image,
+                        image = listing.image,
                         itemAvailable = listing.itemAvailable,
                         dateAvailable = listing.dateAvailable,
                         email = loggedInViewModel.liveFirebaseUser.value?.email!!,
+                        profilePic = listing.profilePic,
+                        location = Location(listing.location?.lat!!, listing.location?.lng!!, listing.location?.zoom!!)
                     )
                 )
                 Timber.i("ADDING LISTING %s", listing)

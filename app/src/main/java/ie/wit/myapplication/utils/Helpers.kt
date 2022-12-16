@@ -1,13 +1,18 @@
 package ie.wit.myapplication.utils
 
+import android.app.Activity
 import android.app.AlertDialog
+import android.content.Intent
 import android.graphics.Color
+import android.net.Uri
 import android.view.animation.Transformation
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
 import androidx.fragment.app.FragmentActivity
 import com.makeramen.roundedimageview.RoundedTransformationBuilder
 import ie.wit.myapplication.R
 import com.squareup.picasso.Picasso
+import java.io.IOException
 
 fun createLoader(activity: FragmentActivity) : AlertDialog {
     val loaderBuilder = AlertDialog.Builder(activity)
@@ -35,7 +40,7 @@ fun hideLoader(loader: AlertDialog) {
 fun serviceUnavailableMessage(activity: FragmentActivity) {
     Toast.makeText(
         activity,
-        "Donation Service Unavailable. Try again later",
+        "Freecycle Service Unavailable. Try again later",
         Toast.LENGTH_LONG
     ).show()
 }
@@ -43,7 +48,7 @@ fun serviceUnavailableMessage(activity: FragmentActivity) {
 fun serviceAvailableMessage(activity: FragmentActivity) {
     Toast.makeText(
         activity,
-        "Donation Contacted Successfully",
+        "Freecycle Contacted Successfully",
         Toast.LENGTH_LONG
     ).show()
 }
@@ -55,4 +60,3 @@ fun customTransformation() : com.squareup.picasso.Transformation =
         .cornerRadiusDp(35F)
         .oval(false)
         .build()
-

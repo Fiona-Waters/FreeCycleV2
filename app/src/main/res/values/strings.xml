@@ -24,6 +24,7 @@
     <string name="save_listing"> Save Listing </string>
     <string name="button_addImage"> Add Image </string>
     <string name="select_listing_image">Select Listing Image</string>
+    <string name="select_profile_image">Select Profile Image</string>
     <string name="edit_image"> Edit Image </string>
     <string name="hint_listingImage">Listing Image</string>
     <string name="button_delete_listing">Delete Listing</string>

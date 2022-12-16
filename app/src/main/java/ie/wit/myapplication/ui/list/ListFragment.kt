@@ -62,7 +62,6 @@ class ListFragment : Fragment(), FreecycleListener {
 
         val swipeDeleteHandler = object : SwipeToDeleteCallback(requireContext()) {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                //    showLoader(loader,"Deleting Donation")
                 val adapter = binding.recyclerView.adapter as FreecycleAdapter
                 adapter.removeAt(viewHolder.adapterPosition)
                 listViewModel.delete(
@@ -118,10 +117,8 @@ class ListFragment : Fragment(), FreecycleListener {
         binding.recyclerView.adapter = FreecycleAdapter(listings, this, listViewModel.readOnly.value!!)
         if (listings.isEmpty()) {
             binding.recyclerView.visibility = View.GONE
-            //    binding.donationsNotFound.visibility = View.VISIBLE
         } else {
             binding.recyclerView.visibility = View.VISIBLE
-            //   binding.donationsNotFound.visibility = View.GONE
         }
     }
 
@@ -138,7 +135,6 @@ class ListFragment : Fragment(), FreecycleListener {
     private fun setSwipeRefresh() {
         binding.swiperefresh.setOnRefreshListener {
             binding.swiperefresh.isRefreshing = true
-            //  showLoader(loader,"Downloading Donations")
             if(listViewModel.readOnly.value!!)
                 listViewModel.loadAll()
             else

@@ -23,12 +23,12 @@ object FirebaseDBManager : FreecycleStore {
                     val localList = ArrayList<FreecycleModel>()
                     val children = snapshot.children
                     children.forEach {
-                  //      val donation = it.getValue(FreecycleModel::class.java)
+                  //      val listing = it.getValue(FreecycleModel::class.java)
                         val data = it.value as HashMap<String, Any?>
                         val listing = FreecycleModel.fromMap(data!!)
                         localList.add(listing!!)
                     }
-                    database.child("donations")
+                    database.child("listings")
                         .removeEventListener(this)
 
                     listings.value = localList
@@ -133,6 +133,27 @@ object FirebaseDBManager : FreecycleStore {
         childUpdate["user-listings/$userid/$listingid"] = listingValues
 
         database.updateChildren(childUpdate)
+    }
+
+    fun updateImageRef(userid: String,imageUri: String) {
+
+        val userListings = database.child("user-listings").child(userid)
+        val allListings = database.child("listings")
+
+        userListings.addListenerForSingleValueEvent(
+            object : ValueEventListener {
+                override fun onCancelled(error: DatabaseError) {}
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    snapshot.children.forEach {
+                        //Update Users imageUri
+                        it.ref.child("profilepic").setValue(imageUri)
+                        //Update all listings that match 'it'
+                        val listing = it.getValue(FreecycleModel::class.java)
+                        allListings.child(listing!!.uid!!)
+                            .child("profilepic").setValue(imageUri)
+                    }
+                }
+            })
     }
 
 }

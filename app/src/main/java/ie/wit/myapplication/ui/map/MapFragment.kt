@@ -19,6 +19,7 @@ import com.google.android.gms.maps.model.MarkerOptions
 import ie.wit.myapplication.R
 import ie.wit.myapplication.databinding.FragmentMapBinding
 import ie.wit.myapplication.models.Location
+import ie.wit.myapplication.ui.list.ListViewModel
 
 class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerDragListener,
     GoogleMap.OnMarkerClickListener {
@@ -27,6 +28,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerDragListen
     private val binding get() = _binding!!
 
     private lateinit var mapViewModel: MapViewModel
+    private lateinit var listViewModel: ListViewModel
     private lateinit var map: GoogleMap
     private var mapReady = false
     var location = Location()
@@ -39,9 +41,8 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerDragListen
         _binding = FragmentMapBinding.inflate(inflater, container, false)
         val root = binding.root
         mapViewModel = ViewModelProvider(this).get(MapViewModel::class.java)
-    //q    mapViewModel.observableLocation.observe(viewLifecycleOwner, Observer { })
-        //    val root = inflater.inflate(R.layout.fragment_map, container, false)
-      //  location = args.location
+        mapViewModel.observableLocation.observe(viewLifecycleOwner, Observer { })
+        location = args.location
         val mapFragment =
             childFragmentManager.findFragmentById(R.id.mapFragment) as SupportMapFragment
         mapFragment.getMapAsync { googleMap ->
