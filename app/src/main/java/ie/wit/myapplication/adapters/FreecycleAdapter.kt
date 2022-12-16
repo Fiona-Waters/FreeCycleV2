@@ -38,28 +38,25 @@ class FreecycleAdapter constructor(
 
     override fun getItemCount(): Int = listings.size
 
-    inner class MainHolder(val binding : CardFreecycleBinding, private val readOnly : Boolean) :
+    inner class MainHolder(val binding: CardFreecycleBinding, private val readOnly: Boolean) :
         RecyclerView.ViewHolder(binding.root) {
 
         val readOnlyRow = readOnly
 
         fun bind(listing: FreecycleModel, listener: FreecycleListener) {
             binding.root.tag = listing
-         //   binding.listing = listing
             binding.listingTitle.text = listing.listingTitle
             binding.name.text = listing.name
-        //    Picasso.get().load(listing.image).resize(200, 200).into(binding.imageIcon)
-            binding.imageIcon.setImageResource(R.mipmap.ic_launcher_round)
-            Picasso.get().load(listing.profilePic!!.toUri())
-                .resize(200,200)
-                .transform(customTransformation())
-                .centerCrop()
-                .into(binding.imageIcon)
+            Picasso.get().load(listing.image).resize(200, 200).into(binding.imageIcon)
+//            Picasso.get().load(listing.profilePic!!.toUri())
+//                .resize(200,200)
+//                .transform(customTransformation())
+//                .centerCrop()
+//                .into(binding.imageIcon)
             binding.root.setOnClickListener { listener.onListingClick(listing) }
-         //   binding.executePendingBindings()
+            //   binding.executePendingBindings()
         }
     }
-
 
 
 }

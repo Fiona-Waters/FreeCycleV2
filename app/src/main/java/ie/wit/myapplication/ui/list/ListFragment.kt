@@ -2,6 +2,7 @@ package ie.wit.myapplication.ui.list
 
 import android.os.Bundle
 import android.view.*
+import android.widget.ImageView
 import androidx.appcompat.widget.SwitchCompat
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
@@ -16,6 +17,7 @@ import androidx.navigation.ui.NavigationUI
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.squareup.picasso.Picasso
 import ie.wit.myapplication.R
 import ie.wit.myapplication.adapters.FreecycleAdapter
 import ie.wit.myapplication.adapters.FreecycleListener
@@ -32,7 +34,6 @@ class ListFragment : Fragment(), FreecycleListener {
     private var _binding: FragmentListBinding? = null
     private val binding get() = _binding!!
 
-    //  lateinit var app: MainApp
     private val listViewModel: ListViewModel by activityViewModels()
     private val loggedInViewModel: LoggedInViewModel by activityViewModels()
 

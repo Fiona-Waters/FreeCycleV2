@@ -1,14 +1,18 @@
 package ie.wit.myapplication.ui.viewListing
 
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
+import com.squareup.picasso.Picasso
+import ie.wit.myapplication.R
 import ie.wit.myapplication.databinding.FragmentViewListingBinding
 import ie.wit.myapplication.ui.auth.LoggedInViewModel
 
@@ -51,6 +55,11 @@ class ViewListingFragment : Fragment() {
         } else {
             binding.itemAvailability.text = unavailable
         }
+        val image = view?.findViewById<ImageView>(R.id.imageIcon)
+        if (viewListingViewModel.observableListing.value?.image != "") {
+            image?.background = null
+        }
+        Picasso.get().load(viewListingViewModel.observableListing.value?.image).into(binding.imageIcon)
     }
 
     override fun onResume() {

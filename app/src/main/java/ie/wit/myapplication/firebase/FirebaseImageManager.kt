@@ -10,15 +10,18 @@ import com.google.firebase.storage.UploadTask
 import com.squareup.picasso.MemoryPolicy
 import com.squareup.picasso.Picasso
 import com.squareup.picasso.Target
+import ie.wit.myapplication.models.FreecycleModel
 import ie.wit.myapplication.utils.customTransformation
+import ie.wit.myapplication.utils.readImageFromPath
 import timber.log.Timber
 import java.io.ByteArrayOutputStream
-
+import java.io.File
 
 object FirebaseImageManager {
 
     var storage = FirebaseStorage.getInstance().reference
     var imageUri = MutableLiveData<Uri>()
+    lateinit var userid: String
 
     fun checkStorageForExistingProfilePic(userid: String) {
         val imageRef = storage.child("photos").child("${userid}.jpg")
@@ -112,5 +115,6 @@ object FirebaseImageManager {
                 override fun onPrepareLoad(placeHolderDrawable: Drawable?) {}
             })
     }
+
 
 }

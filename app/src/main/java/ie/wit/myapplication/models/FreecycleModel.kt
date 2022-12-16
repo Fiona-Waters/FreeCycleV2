@@ -50,8 +50,8 @@ data class FreecycleModel(
                 contactNumber = map["contactNumber"].toString(),
                 listingTitle = map["listingTitle"].toString(),
                 listingDescription = map["listingDescription"].toString(),
-                location = map["location"] as? Location,
                 image = map["image"].toString(),
+                location = map["location"] as? Location,
                 itemAvailable = map["itemAvailable"] as Boolean,
                 dateAvailable = Instant.ofEpochMilli(map["dateAvailable"] as Long)
                     .atZone(ZoneId.systemDefault()).toLocalDate(),

@@ -15,8 +15,10 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
+import com.squareup.picasso.Picasso
 import ie.wit.myapplication.R
 import ie.wit.myapplication.databinding.FragmentAddBinding
+import ie.wit.myapplication.firebase.FirebaseImageManager
 import ie.wit.myapplication.models.FreecycleModel
 import ie.wit.myapplication.models.Location
 import ie.wit.myapplication.ui.auth.LoggedInViewModel
@@ -106,6 +108,7 @@ class AddFragment : Fragment() {
                 binding.datePicker.year, binding.datePicker.month + 1, binding.datePicker.dayOfMonth
             )
             listing.dateAvailable = dateSelected
+            FirebaseImageManager.updateDefaultImage(loggedInViewModel.liveFirebaseUser.value?.uid!!, R.drawable.logo_image, binding.ListingImage)
 
             if (listing.listingTitle.isNotEmpty() && listing.listingDescription.isNotEmpty() && listing.name.isNotEmpty()) {
 //
@@ -152,8 +155,8 @@ class AddFragment : Fragment() {
                     AppCompatActivity.RESULT_OK -> {
                         if (result.data != null) {
                             Timber.i("Got Result ${result.data!!.data}")
-                            //         listing.image = result.data!!.data!!
-                            //          Picasso.get().load(listing.image).into(binding.ListingImage)
+                                     listing.image = result.data!!.data.toString()!!
+                                      Picasso.get().load(listing.image).into(binding.ListingImage)
                             binding.chooseImage.setText(R.string.edit_image)
                         } // end of if
                     }
