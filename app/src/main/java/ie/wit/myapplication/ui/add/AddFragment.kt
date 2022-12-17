@@ -14,6 +14,11 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
 import ie.wit.myapplication.R
@@ -22,7 +27,6 @@ import ie.wit.myapplication.firebase.FirebaseImageManager
 import ie.wit.myapplication.models.FreecycleModel
 import ie.wit.myapplication.models.Location
 import ie.wit.myapplication.ui.auth.LoggedInViewModel
-import ie.wit.myapplication.ui.list.ListViewModel
 import ie.wit.myapplication.utils.showImagePicker
 import timber.log.Timber
 import java.time.LocalDate
@@ -31,18 +35,17 @@ class AddFragment : Fragment() {
 
     private var _binding: FragmentAddBinding? = null
     private lateinit var imageIntentLauncher: ActivityResultLauncher<Intent>
-
-    // TODO map intent launcher
-    // lateinit var app: MainApp
     private val binding get() = _binding!!
     var listing = FreecycleModel()
     private lateinit var addViewModel: AddViewModel
-    private val listViewModel: ListViewModel by activityViewModels()
     private val loggedInViewModel: LoggedInViewModel by activityViewModels()
+
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this.requireContext())
     }
 
     override fun onCreateView(
@@ -55,6 +58,11 @@ class AddFragment : Fragment() {
         _binding = FragmentAddBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
+        fusedLocationClient.lastLocation.addOnSuccessListener { location : android.location.Location? ->
+            if (location != null) {
+                listing.location = Location(location.latitude, location.longitude, 15f)
+            }
+        }
         binding.pickupLocation.setOnClickListener{
             Timber.i("set location pressed")
             val location = Location(52.245696, -7.139102, 15f)
@@ -146,6 +154,7 @@ class AddFragment : Fragment() {
 
     }
 
+
     // TODO override fun onResume() {
 
     private fun registerImagePickerCallback() {
@@ -155,7 +164,7 @@ class AddFragment : Fragment() {
                     AppCompatActivity.RESULT_OK -> {
                         if (result.data != null) {
                             Timber.i("Got Result ${result.data!!.data}")
-                                     listing.image = result.data!!.data.toString()!!
+                                     listing.image = result.data!!.data.toString()
                                       Picasso.get().load(listing.image).into(binding.ListingImage)
                             binding.chooseImage.setText(R.string.edit_image)
                         } // end of if
@@ -165,4 +174,7 @@ class AddFragment : Fragment() {
                 }
             }
     }
+
+
+
 }

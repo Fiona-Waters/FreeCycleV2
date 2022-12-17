@@ -75,6 +75,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerDragListen
         location.lat = marker.position.latitude
         location.lng = marker.position.longitude
         location.zoom = map.cameraPosition.zoom
+        //TODO Call firebase listing update
     }
 
     override fun onMarkerDragStart(marker: Marker) {
@@ -85,6 +86,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerDragListen
         marker.snippet = "GPS : $loc"
         return false
     }
+
 
 //    private fun addMarkers(googleMap: GoogleMap) {
 //        val loc = LatLng(52.245696, -7.139102)

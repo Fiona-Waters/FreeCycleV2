@@ -7,9 +7,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.net.toUri
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
@@ -18,6 +20,8 @@ import com.squareup.picasso.Picasso
 import ie.wit.myapplication.R
 import ie.wit.myapplication.databinding.FragmentEditBinding
 import ie.wit.myapplication.models.FreecycleModel
+import ie.wit.myapplication.models.Location
+import ie.wit.myapplication.ui.add.AddFragmentDirections
 import ie.wit.myapplication.ui.auth.LoggedInViewModel
 import ie.wit.myapplication.utils.showImagePicker
 import timber.log.Timber
@@ -47,6 +51,19 @@ class EditFragment : Fragment() {
             showImagePicker(imageIntentLauncher)
         }
         registerImagePickerCallback()
+
+        binding.pickupLocation.setOnClickListener {
+            val location = Location(52.245696, -7.139102, 15f)
+            if (listing.location?.zoom!! != 0f) {
+                location.lat = listing.location?.lat!!
+                location.lng = listing.location?.lng!!
+                location.zoom = listing.location?.zoom!!
+            }
+            val action = EditFragmentDirections.actionEditFragmentToMapFragment(location)
+            findNavController().navigate(action)
+        }
+
+
 
         binding.btnUpdate.setOnClickListener {
             val updatedListing = binding.listingvm?.observableListing!!.value!!
@@ -87,10 +104,19 @@ class EditFragment : Fragment() {
         binding.toggleButton.isChecked =
             editViewModel.observableListing.value?.itemAvailable == true
         // TODO next line - location and image
-        binding.chooseImage = editViewModel.observableListing.value?.image
 
+        val image = view?.findViewById<ImageView>(R.id.imageIcon)
+        if (editViewModel.observableListing.value?.image != "") {
+            image?.background = null
+        }
+        Picasso.get().load(editViewModel.observableListing.value?.image).into(binding.ListingImage)
+
+        if (listing.location?.zoom != 0f) {
+            editViewModel.observableListing.value?.location?.lat = listing.location?.lat!!
+            editViewModel.observableListing.value?.location?.lng = listing.location?.lng!!
+            editViewModel.observableListing.value?.location?.zoom = listing.location?.zoom!!
+        }
         binding.listingvm = editViewModel
-
     }
 
     override fun onResume() {
