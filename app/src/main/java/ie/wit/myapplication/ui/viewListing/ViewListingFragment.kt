@@ -23,8 +23,6 @@ class ViewListingFragment : Fragment() {
     private val args by navArgs<ViewListingFragmentArgs>()
     private var _binding: FragmentViewListingBinding? = null
     private val binding get() = _binding!!
-    private val loggedInViewModel: LoggedInViewModel by activityViewModels()
-    //   private val listViewModel: ListViewModel by activityViewModels()
 
 //    override fun onCreate(savedInstanceState: Bundle?) {
 //        super.onCreate(savedInstanceState)
@@ -37,6 +35,8 @@ class ViewListingFragment : Fragment() {
     ): View? {
         _binding = FragmentViewListingBinding.inflate(inflater, container, false)
         val root = binding.root
+
+        //todo map
 
         viewListingViewModel = ViewModelProvider(this).get(ViewListingViewModel::class.java)
         viewListingViewModel.observableListing.observe(viewLifecycleOwner, Observer { render() })
@@ -55,11 +55,11 @@ class ViewListingFragment : Fragment() {
         } else {
             binding.itemAvailability.text = unavailable
         }
-        val image = view?.findViewById<ImageView>(R.id.imageIcon)
+    //    val image = view?.findViewById<ImageView>(R.id.imageIcon)
         if (viewListingViewModel.observableListing.value?.image != "") {
-            image?.background = null
+            Picasso.get().load(viewListingViewModel.observableListing.value?.image).into(binding.imageIcon)
+
         }
-        Picasso.get().load(viewListingViewModel.observableListing.value?.image).into(binding.imageIcon)
     }
 
     override fun onResume() {

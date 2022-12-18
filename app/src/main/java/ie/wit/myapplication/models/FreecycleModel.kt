@@ -44,6 +44,10 @@ data class FreecycleModel(
     companion object {
         @Exclude
         fun fromMap(map: Map<String, Any?>): FreecycleModel {
+            var location: Location? = null
+            if(map["location"] != null) {
+                location = getLocationFromMap(map["location"] as Map<String, Any?>)
+            }
             return FreecycleModel(
                 uid = map["uid"].toString(),
                 name = map["name"].toString(),
@@ -51,13 +55,19 @@ data class FreecycleModel(
                 listingTitle = map["listingTitle"].toString(),
                 listingDescription = map["listingDescription"].toString(),
                 image = map["image"].toString(),
-                location = map["location"] as? Location,
+                location = location,
                 itemAvailable = map["itemAvailable"] as Boolean,
                 dateAvailable = Instant.ofEpochMilli(map["dateAvailable"] as Long)
                     .atZone(ZoneId.systemDefault()).toLocalDate(),
                 email = map["email"].toString(),
                 profilePic = map["profilePic"].toString()
             )
+        }
+
+        private fun getLocationFromMap(map: Map<String, Any?>): Location {
+            return Location(lat =  map["lat"] as Double,
+                lng = map["lng"] as Double,
+                zoom = (map["zoom"] as Long).toFloat())
         }
     }
 }

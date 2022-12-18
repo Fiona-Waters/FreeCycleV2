@@ -21,6 +21,8 @@ class EditViewModel()  : ViewModel() {
         get() = listing
         set(value) {listing.value = value.value}
 
+
+
     fun getListing(userid: String, id: String) {
         try {
             FirebaseDBManager.findById(userid, id, listing)

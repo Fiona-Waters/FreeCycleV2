@@ -1,6 +1,9 @@
 package ie.wit.myapplication.ui.add
 
+import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,7 +11,10 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresPermission
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
@@ -41,6 +47,8 @@ class AddFragment : Fragment() {
     private val loggedInViewModel: LoggedInViewModel by activityViewModels()
 
     private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private val REQUEST_LOCATION_PERMISSION = 1
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,6 +56,7 @@ class AddFragment : Fragment() {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this.requireContext())
     }
 
+    @SuppressLint("MissingPermission")
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -57,27 +66,28 @@ class AddFragment : Fragment() {
 
         _binding = FragmentAddBinding.inflate(inflater, container, false)
         val root: View = binding.root
+        enableMyLocation()
 
         fusedLocationClient.lastLocation.addOnSuccessListener { location : android.location.Location? ->
             if (location != null) {
                 listing.location = Location(location.latitude, location.longitude, 15f)
             }
         }
-        binding.pickupLocation.setOnClickListener{
-            Timber.i("set location pressed")
-            val location = Location(52.245696, -7.139102, 15f)
-            if (listing.location?.zoom!! != 0f) {
-                location.lat = listing.location?.lat!!
-                location.lng = listing.location?.lng!!
-                location.zoom = listing.location?.zoom!!
-            }
-            val action = AddFragmentDirections.actionAddFragmentToMapFragment(location)
-            findNavController().navigate(action)
-
-//            val launcherIntent =
-//                Intent(this, MapActivity::class.java).putExtra("location", location)
-//            mapIntentLauncher.launch(launcherIntent)
-        }
+//        binding.pickupLocation.setOnClickListener{
+//            Timber.i("set location pressed")
+//            val location = Location(52.245696, -7.139102, 15f)
+//            if (listing.location?.zoom!! != 0f) {
+//                location.lat = listing.location?.lat!!
+//                location.lng = listing.location?.lng!!
+//                location.zoom = listing.location?.zoom!!
+//            }
+//            val action = AddFragmentDirections.actionAddFragmentToMapFragment(location)
+//            findNavController().navigate(action)
+//
+////            val launcherIntent =
+////                Intent(this, MapActivity::class.java).putExtra("location", location)
+////            mapIntentLauncher.launch(launcherIntent)
+//        }
         binding.chooseImage.setOnClickListener {
             showImagePicker(imageIntentLauncher)
         }
@@ -89,6 +99,32 @@ class AddFragment : Fragment() {
         })
         setButtonListener(binding)
         return root
+    }
+
+    private fun isPermissionGranted() : Boolean {
+        return ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+    }
+    @SuppressLint("MissingPermission")
+    private fun enableMyLocation() {
+        if (!isPermissionGranted()) {
+            ActivityCompat.requestPermissions(
+                requireActivity(),
+                arrayOf<String>(Manifest.permission.ACCESS_FINE_LOCATION),
+                REQUEST_LOCATION_PERMISSION
+            )
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray) {
+        if (requestCode == REQUEST_LOCATION_PERMISSION) {
+            if (grantResults.contains(PackageManager.PERMISSION_GRANTED)) {
+                enableMyLocation()
+
+            }
+        }
     }
 
     private fun render(status: Boolean) {
@@ -174,7 +210,6 @@ class AddFragment : Fragment() {
                 }
             }
     }
-
 
 
 }

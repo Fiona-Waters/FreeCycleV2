@@ -13,4 +13,5 @@ class MapViewModel : ViewModel() {
         set(value) {
             location.value = value.value
         }
+
 }

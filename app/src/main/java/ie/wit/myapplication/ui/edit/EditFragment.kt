@@ -19,12 +19,14 @@ import androidx.navigation.fragment.navArgs
 import com.squareup.picasso.Picasso
 import ie.wit.myapplication.R
 import ie.wit.myapplication.databinding.FragmentEditBinding
+import ie.wit.myapplication.firebase.FirebaseImageManager
 import ie.wit.myapplication.models.FreecycleModel
 import ie.wit.myapplication.models.Location
 import ie.wit.myapplication.ui.add.AddFragmentDirections
 import ie.wit.myapplication.ui.auth.LoggedInViewModel
 import ie.wit.myapplication.utils.showImagePicker
 import timber.log.Timber
+import java.time.LocalDate
 
 class EditFragment : Fragment() {
 
@@ -34,8 +36,6 @@ class EditFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var imageIntentLauncher: ActivityResultLauncher<Intent>
     private val loggedInViewModel: LoggedInViewModel by activityViewModels()
-    val listing = FreecycleModel()
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,52 +44,47 @@ class EditFragment : Fragment() {
         _binding = FragmentEditBinding.inflate(inflater, container, false)
         val root = binding.root
 
-        editViewModel = ViewModelProvider(this).get(EditViewModel::class.java)
+        editViewModel = ViewModelProvider(requireActivity()).get(EditViewModel::class.java)
         editViewModel.observableListing.observe(viewLifecycleOwner, Observer { render() })
 
-        binding.chooseImage.setOnClickListener{
+        binding.chooseImage.setOnClickListener {
             showImagePicker(imageIntentLauncher)
         }
         registerImagePickerCallback()
 
         binding.pickupLocation.setOnClickListener {
             val location = Location(52.245696, -7.139102, 15f)
-            if (listing.location?.zoom!! != 0f) {
-                location.lat = listing.location?.lat!!
-                location.lng = listing.location?.lng!!
-                location.zoom = listing.location?.zoom!!
+            if (editViewModel.observableListing.value?.location?.zoom != 0f) {
+                location.lat = editViewModel.observableListing.value?.location?.lat!!
+                location.lng = editViewModel.observableListing.value?.location?.lng!!
+                location.zoom = editViewModel.observableListing.value?.location?.zoom!!
             }
-            val action = EditFragmentDirections.actionEditFragmentToMapFragment(location)
+            val action =
+                EditFragmentDirections.actionEditFragmentToMapFragment(editViewModel.observableListing.value?.location!!)
             findNavController().navigate(action)
         }
 
 
 
         binding.btnUpdate.setOnClickListener {
-            val updatedListing = binding.listingvm?.observableListing!!.value!!
+            val updatedListing = editViewModel.observableListing!!.value!!
+            val dateSelected = LocalDate.of(
+                binding.datePicker.year, binding.datePicker.month + 1, binding.datePicker.dayOfMonth
+            )
+            updatedListing.dateAvailable = dateSelected
 
-            //TODO handle datepicker and image update etc
+            //TODO handle datepicker update
 
             editViewModel.updateListing(
                 loggedInViewModel.liveFirebaseUser.value?.uid!!,
                 args.listingid,
-               updatedListing,
+                updatedListing,
             )
             findNavController().navigateUp()
         }
-        // TODO add update location functionality
-        // TODO add edit image functionality
-
         return root
     }
 
-    fun setButtonListener(layout: FragmentEditBinding) {
-        layout.btnUpdate.setOnClickListener{
-
-            listing.location
-            listing.image
-        }
-    }
 
     private fun render() {
         binding.datePicker.init(
@@ -103,28 +98,22 @@ class EditFragment : Fragment() {
 
         binding.toggleButton.isChecked =
             editViewModel.observableListing.value?.itemAvailable == true
-        // TODO next line - location and image
 
-        val image = view?.findViewById<ImageView>(R.id.imageIcon)
         if (editViewModel.observableListing.value?.image != "") {
-            image?.background = null
-        }
-        Picasso.get().load(editViewModel.observableListing.value?.image).into(binding.ListingImage)
-
-        if (listing.location?.zoom != 0f) {
-            editViewModel.observableListing.value?.location?.lat = listing.location?.lat!!
-            editViewModel.observableListing.value?.location?.lng = listing.location?.lng!!
-            editViewModel.observableListing.value?.location?.zoom = listing.location?.zoom!!
+            Picasso.get().load(editViewModel.observableListing.value?.image)
+                .into(binding.ListingImage)
         }
         binding.listingvm = editViewModel
     }
 
     override fun onResume() {
         super.onResume()
-        editViewModel.getListing(
-            loggedInViewModel.liveFirebaseUser.value?.uid!!,
-            args.listingid
-        )
+        if (editViewModel.observableListing.value == null) {
+            editViewModel.getListing(
+                loggedInViewModel.liveFirebaseUser.value?.uid!!,
+                args.listingid
+            )
+        }
     }
 
     private fun registerImagePickerCallback() {
@@ -134,9 +123,14 @@ class EditFragment : Fragment() {
                     AppCompatActivity.RESULT_OK -> {
                         if (result.data != null) {
                             Timber.i("Got Result ${result.data!!.data}")
-                            editViewModel.observableListing.value?.image = result.data!!.data.toString()!!
-                            Picasso.get().load(editViewModel.observableListing.value?.image).into(binding.ListingImage)
+                            var updated = editViewModel.observableListing.value
+                            updated?.image = result.data!!.data.toString()!!
+                            Picasso.get().load(updated?.image).into(binding.ListingImage)
                             binding.chooseImage.setText(R.string.edit_image)
+                            editViewModel.updateListing(
+                                loggedInViewModel.liveFirebaseUser.value?.uid!!,
+                                args.listingid, updated!!
+                            )
                         } // end of if
                     }
                     AppCompatActivity.RESULT_CANCELED -> {}
@@ -144,5 +138,6 @@ class EditFragment : Fragment() {
                 }
             }
     }
+
 
 }
