@@ -16,7 +16,6 @@ class AddViewModel : ViewModel() {
 
     fun addListing(firebaseUser: MutableLiveData<FirebaseUser>, listing: FreecycleModel) {
         status.value = try {
-            // FreecycleManager.create(listing)
             FirebaseDBManager.create(firebaseUser, listing)
             true
         } catch (e: IllegalArgumentException) {

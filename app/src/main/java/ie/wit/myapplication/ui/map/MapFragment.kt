@@ -65,7 +65,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerDragListen
         val loc = LatLng(args.location.lat, args.location.lng)
         enableMyLocation()
         val options = MarkerOptions()
-            .title("Listing")
+            .title("Listing Location")
             .snippet("GPS : $loc")
             .draggable(true)
             .position(loc)
@@ -113,7 +113,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerDragListen
     override fun onMarkerDragEnd(marker: Marker) {
         editViewModel.observableListing.value?.location?.lat = marker.position.latitude
         editViewModel.observableListing.value?.location?.lng = marker.position.longitude
-        // todo add zoom
+        editViewModel.observableListing.value?.location?.zoom = map.cameraPosition.zoom
     }
 
     override fun onMarkerDragStart(marker: Marker) {

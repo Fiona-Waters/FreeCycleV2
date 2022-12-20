@@ -22,7 +22,6 @@ class ListViewModel : ViewModel() {
 
     fun load() {
         try {
-            //  FreecycleManager.findAll(LiveFirebaseUser.value?.email!!, listings)
             readOnly.value = false
             FirebaseDBManager.findAll(liveFirebaseUser.value?.uid!!, listings)
             Timber.i("List Load Success : ${listings.value.toString()}")

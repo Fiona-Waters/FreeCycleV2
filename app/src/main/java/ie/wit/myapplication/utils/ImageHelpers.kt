@@ -46,11 +46,3 @@ fun readImageUri(resultCode: Int, data: Intent?): Uri? {
     }
     return uri
 }
-
-
-//fun customTransformation() : com.squareup.picasso.Transformation? =
-//    RoundedTransformationBuilder()
-//        .borderColor(Color.WHITE)
-//        .borderWidthDp(2F)
-//        .oval(false)
-//        .build()

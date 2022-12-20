@@ -43,15 +43,12 @@ class ListFragment : Fragment(), FreecycleListener {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = FragmentListBinding.inflate(inflater, container, false)
         val root = binding.root
         setupMenu()
         binding.recyclerView.layoutManager = LinearLayoutManager(activity)
-        //   listViewModel = ViewModelProvider(this).get(ListViewModel::class.java)
         listViewModel.observableListings.observe(viewLifecycleOwner, Observer { listings ->
             listings?.let {
                 render(listings as ArrayList<FreecycleModel>)
@@ -69,7 +66,6 @@ class ListFragment : Fragment(), FreecycleListener {
                     listViewModel.liveFirebaseUser.value?.uid!!,
                     (viewHolder.itemView.tag as FreecycleModel).uid!!
                 )
-                //   hideLoader(loader)
             }
         }
         val itemTouchDeleteHelper = ItemTouchHelper(swipeDeleteHandler)
@@ -90,7 +86,6 @@ class ListFragment : Fragment(), FreecycleListener {
     private fun setupMenu() {
         (requireActivity() as MenuHost).addMenuProvider(object : MenuProvider {
             override fun onPrepareMenu(menu: Menu) {
-                // TODO
             }
 
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
@@ -102,20 +97,23 @@ class ListFragment : Fragment(), FreecycleListener {
                 toggleListings.isChecked = false
 
                 toggleListings.setOnCheckedChangeListener { _, isChecked ->
-                    if(isChecked) listViewModel.loadAll()
+                    if (isChecked) listViewModel.loadAll()
                     else listViewModel.load()
 
                 }
             }
 
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-                return NavigationUI.onNavDestinationSelected(menuItem, requireView().findNavController())
+                return NavigationUI.onNavDestinationSelected(
+                    menuItem, requireView().findNavController()
+                )
             }
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 
     private fun render(listings: ArrayList<FreecycleModel>) {
-        binding.recyclerView.adapter = FreecycleAdapter(listings, this, listViewModel.readOnly.value!!)
+        binding.recyclerView.adapter =
+            FreecycleAdapter(listings, this, listViewModel.readOnly.value!!)
         if (listings.isEmpty()) {
             binding.recyclerView.visibility = View.GONE
         } else {
@@ -136,16 +134,13 @@ class ListFragment : Fragment(), FreecycleListener {
     private fun setSwipeRefresh() {
         binding.swiperefresh.setOnRefreshListener {
             binding.swiperefresh.isRefreshing = true
-            if(listViewModel.readOnly.value!!)
-                listViewModel.loadAll()
-            else
-                listViewModel.load()
+            if (listViewModel.readOnly.value!!) listViewModel.loadAll()
+            else listViewModel.load()
         }
     }
 
     private fun checkSwipeRefresh() {
-        if (binding.swiperefresh.isRefreshing)
-            binding.swiperefresh.isRefreshing = false
+        if (binding.swiperefresh.isRefreshing) binding.swiperefresh.isRefreshing = false
     }
 
     override fun onResume() {

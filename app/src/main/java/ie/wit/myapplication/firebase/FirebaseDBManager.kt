@@ -23,7 +23,6 @@ object FirebaseDBManager : FreecycleStore {
                     val localList = ArrayList<FreecycleModel>()
                     val children = snapshot.children
                     children.forEach {
-                  //      val listing = it.getValue(FreecycleModel::class.java)
                         val data = it.value as HashMap<String, Any?>
                         val listing = FreecycleModel.fromMap(data!!)
                         localList.add(listing!!)
@@ -33,7 +32,8 @@ object FirebaseDBManager : FreecycleStore {
 
                     listings.value = localList
                 }
-            })    }
+            })
+    }
 
     override fun findAll(userid: String, listings: MutableLiveData<List<FreecycleModel>>) {
         database.child("user-listings").child(userid)
@@ -46,7 +46,6 @@ object FirebaseDBManager : FreecycleStore {
                     val localList = ArrayList<FreecycleModel>()
                     val children = snapshot.children
                     children.forEach {
-                        //val listing = it.getValue(FreecycleModel::class.java)
                         val data = it.value as HashMap<String, Any?>
                         val listing = FreecycleModel.fromMap(data!!)
                         localList.add(listing)
@@ -67,7 +66,6 @@ object FirebaseDBManager : FreecycleStore {
         database.child("user-listings").child(userid)
             .child(listingid).get().addOnSuccessListener {
 
-                // listing.value = it.getValue(FreecycleModel::class.java)
                 val data = it.value as HashMap<String, Any?>
                 val l = FreecycleModel.fromMap(data!!)
 
@@ -86,7 +84,6 @@ object FirebaseDBManager : FreecycleStore {
         database.child("listings").child(listingid)
             .get().addOnSuccessListener {
 
-                // listing.value = it.getValue(FreecycleModel::class.java)
                 val data = it.value as HashMap<String, Any?>
                 val l = FreecycleModel.fromMap(data!!)
 
@@ -135,7 +132,7 @@ object FirebaseDBManager : FreecycleStore {
         database.updateChildren(childUpdate)
     }
 
-    fun updateImageRef(userid: String,imageUri: String) {
+    fun updateImageRef(userid: String, imageUri: String) {
 
         val userListings = database.child("user-listings").child(userid)
         val allListings = database.child("listings")

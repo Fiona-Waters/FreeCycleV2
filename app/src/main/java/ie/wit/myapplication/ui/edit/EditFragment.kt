@@ -38,13 +38,16 @@ class EditFragment : Fragment() {
     private val loggedInViewModel: LoggedInViewModel by activityViewModels()
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = FragmentEditBinding.inflate(inflater, container, false)
         val root = binding.root
 
         editViewModel = ViewModelProvider(requireActivity()).get(EditViewModel::class.java)
+        // calling get listing here as have validation in on resume in case of null values
+        editViewModel.getListing(
+            loggedInViewModel.liveFirebaseUser.value?.uid!!, args.listingid
+        )
         editViewModel.observableListing.observe(viewLifecycleOwner, Observer { render() })
 
         binding.chooseImage.setOnClickListener {
@@ -72,8 +75,6 @@ class EditFragment : Fragment() {
                 binding.datePicker.year, binding.datePicker.month + 1, binding.datePicker.dayOfMonth
             )
             updatedListing.dateAvailable = dateSelected
-
-            //TODO handle datepicker update
 
             editViewModel.updateListing(
                 loggedInViewModel.liveFirebaseUser.value?.uid!!,
@@ -110,8 +111,7 @@ class EditFragment : Fragment() {
         super.onResume()
         if (editViewModel.observableListing.value == null) {
             editViewModel.getListing(
-                loggedInViewModel.liveFirebaseUser.value?.uid!!,
-                args.listingid
+                loggedInViewModel.liveFirebaseUser.value?.uid!!, args.listingid
             )
         }
     }
@@ -129,7 +129,8 @@ class EditFragment : Fragment() {
                             binding.chooseImage.setText(R.string.edit_image)
                             editViewModel.updateListing(
                                 loggedInViewModel.liveFirebaseUser.value?.uid!!,
-                                args.listingid, updated!!
+                                args.listingid,
+                                updated!!
                             )
                         } // end of if
                     }

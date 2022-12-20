@@ -50,7 +50,6 @@ class AddFragment : Fragment() {
     private val REQUEST_LOCATION_PERMISSION = 1
 
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this.requireContext())
@@ -58,9 +57,7 @@ class AddFragment : Fragment() {
 
     @SuppressLint("MissingPermission")
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         Timber.i("ON CREATE VIEW ADD FRAGMENT")
 
@@ -68,26 +65,11 @@ class AddFragment : Fragment() {
         val root: View = binding.root
         enableMyLocation()
 
-        fusedLocationClient.lastLocation.addOnSuccessListener { location : android.location.Location? ->
+        fusedLocationClient.lastLocation.addOnSuccessListener { location: android.location.Location? ->
             if (location != null) {
                 listing.location = Location(location.latitude, location.longitude, 15f)
             }
         }
-//        binding.pickupLocation.setOnClickListener{
-//            Timber.i("set location pressed")
-//            val location = Location(52.245696, -7.139102, 15f)
-//            if (listing.location?.zoom!! != 0f) {
-//                location.lat = listing.location?.lat!!
-//                location.lng = listing.location?.lng!!
-//                location.zoom = listing.location?.zoom!!
-//            }
-//            val action = AddFragmentDirections.actionAddFragmentToMapFragment(location)
-//            findNavController().navigate(action)
-//
-////            val launcherIntent =
-////                Intent(this, MapActivity::class.java).putExtra("location", location)
-////            mapIntentLauncher.launch(launcherIntent)
-//        }
         binding.chooseImage.setOnClickListener {
             showImagePicker(imageIntentLauncher)
         }
@@ -101,9 +83,12 @@ class AddFragment : Fragment() {
         return root
     }
 
-    private fun isPermissionGranted() : Boolean {
-        return ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+    private fun isPermissionGranted(): Boolean {
+        return ContextCompat.checkSelfPermission(
+            requireContext(), Manifest.permission.ACCESS_FINE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
     }
+
     @SuppressLint("MissingPermission")
     private fun enableMyLocation() {
         if (!isPermissionGranted()) {
@@ -116,9 +101,8 @@ class AddFragment : Fragment() {
     }
 
     override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<String>,
-        grantResults: IntArray) {
+        requestCode: Int, permissions: Array<String>, grantResults: IntArray
+    ) {
         if (requestCode == REQUEST_LOCATION_PERMISSION) {
             if (grantResults.contains(PackageManager.PERMISSION_GRANTED)) {
                 enableMyLocation()
@@ -131,7 +115,7 @@ class AddFragment : Fragment() {
         when (status) {
             true -> {
                 view?.let {
-                    //Uncomment this if you want to immediately return to Report
+                    //Uncomment this if you want to immediately return to List
                     //findNavController().popBackStack()
                 }
             }
@@ -142,7 +126,6 @@ class AddFragment : Fragment() {
 
     fun setButtonListener(layout: FragmentAddBinding) {
         layout.btnAdd.setOnClickListener {
-            //      listing.userId = app.user?.userId ?: 0
             listing.name = binding.name.text.toString()
             listing.contactNumber = binding.phoneNumber.text.toString()
             listing.listingTitle = binding.listingTitle.text.toString()
@@ -152,14 +135,17 @@ class AddFragment : Fragment() {
                 binding.datePicker.year, binding.datePicker.month + 1, binding.datePicker.dayOfMonth
             )
             listing.dateAvailable = dateSelected
-            FirebaseImageManager.updateDefaultImage(loggedInViewModel.liveFirebaseUser.value?.uid!!, R.drawable.logo_image, binding.ListingImage)
+            FirebaseImageManager.updateDefaultImage(
+                loggedInViewModel.liveFirebaseUser.value?.uid!!,
+                R.drawable.logo_image,
+                binding.ListingImage
+            )
 
             if (listing.listingTitle.isNotEmpty() && listing.listingDescription.isNotEmpty() && listing.name.isNotEmpty()) {
 //
                 Timber.i("FirebaseUser : ${loggedInViewModel.liveFirebaseUser}")
                 addViewModel.addListing(
-                    loggedInViewModel.liveFirebaseUser,
-                    FreecycleModel(
+                    loggedInViewModel.liveFirebaseUser, FreecycleModel(
                         name = listing.name,
                         contactNumber = listing.contactNumber,
                         listingTitle = listing.listingTitle,
@@ -169,7 +155,11 @@ class AddFragment : Fragment() {
                         dateAvailable = listing.dateAvailable,
                         email = loggedInViewModel.liveFirebaseUser.value?.email!!,
                         profilePic = listing.profilePic,
-                        location = Location(listing.location?.lat!!, listing.location?.lng!!, listing.location?.zoom!!)
+                        location = Location(
+                            listing.location?.lat!!,
+                            listing.location?.lng!!,
+                            listing.location?.zoom!!
+                        )
                     )
                 )
                 Timber.i("ADDING LISTING %s", listing)
@@ -190,9 +180,6 @@ class AddFragment : Fragment() {
 
     }
 
-
-    // TODO override fun onResume() {
-
     private fun registerImagePickerCallback() {
         imageIntentLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -200,8 +187,8 @@ class AddFragment : Fragment() {
                     AppCompatActivity.RESULT_OK -> {
                         if (result.data != null) {
                             Timber.i("Got Result ${result.data!!.data}")
-                                     listing.image = result.data!!.data.toString()
-                                      Picasso.get().load(listing.image).into(binding.ListingImage)
+                            listing.image = result.data!!.data.toString()
+                            Picasso.get().load(listing.image).into(binding.ListingImage)
                             binding.chooseImage.setText(R.string.edit_image)
                         } // end of if
                     }

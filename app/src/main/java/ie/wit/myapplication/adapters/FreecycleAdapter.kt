@@ -50,13 +50,7 @@ class FreecycleAdapter constructor(
             if (listing.image != "") {
                 Picasso.get().load(listing.image).resize(200, 200).into(binding.imageIcon)
             }
-//            Picasso.get().load(listing.profilePic!!.toUri())
-//                .resize(200,200)
-//                .transform(customTransformation())
-//                .centerCrop()
-//                .into(binding.imageIcon)
             binding.root.setOnClickListener { listener.onListingClick(listing) }
-            //   binding.executePendingBindings()
         }
     }
 

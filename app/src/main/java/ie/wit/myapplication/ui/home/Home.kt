@@ -38,7 +38,7 @@ class Home : AppCompatActivity() {
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var loggedInViewModel: LoggedInViewModel
     private lateinit var headerView: View
-    private lateinit var intentLauncher : ActivityResultLauncher<Intent>
+    private lateinit var intentLauncher: ActivityResultLauncher<Intent>
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -89,7 +89,7 @@ class Home : AppCompatActivity() {
         navHeaderMainBinding = NavHeaderMainBinding.bind(headerView)
         navHeaderMainBinding.navHeaderImage.setOnClickListener {
             showImagePicker(intentLauncher)
-    //    Toast.makeText(this,"Click To Change Image",Toast.LENGTH_SHORT).show()
+            //    Toast.makeText(this,"Click To Change Image",Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -144,18 +144,28 @@ class Home : AppCompatActivity() {
     private fun registerImagePickerCallback() {
         intentLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-                when(result.resultCode){
+                when (result.resultCode) {
                     RESULT_OK -> {
                         if (result.data != null) {
-                            Timber.i("DX registerPickerCallback() ${readImageUri(result.resultCode, result.data).toString()}")
+                            Timber.i(
+                                "DX registerPickerCallback() ${
+                                    readImageUri(
+                                        result.resultCode,
+                                        result.data
+                                    ).toString()
+                                }"
+                            )
                             FirebaseImageManager
-                                .updateUserImage(loggedInViewModel.liveFirebaseUser.value!!.uid,
+                                .updateUserImage(
+                                    loggedInViewModel.liveFirebaseUser.value!!.uid,
                                     readImageUri(result.resultCode, result.data),
                                     navHeaderMainBinding.navHeaderImage,
-                                    true)
+                                    true
+                                )
                         } // end of if
                     }
-                    RESULT_CANCELED -> { } else -> { }
+                    RESULT_CANCELED -> {}
+                    else -> {}
                 }
             }
     }

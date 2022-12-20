@@ -13,14 +13,14 @@ import java.io.File
 import android.content.Context
 
 
-
-class EditViewModel()  : ViewModel() {
+class EditViewModel() : ViewModel() {
     private val listing = MutableLiveData<FreecycleModel>()
 
     var observableListing: LiveData<FreecycleModel>
         get() = listing
-        set(value) {listing.value = value.value}
-
+        set(value) {
+            listing.value = value.value
+        }
 
 
     fun getListing(userid: String, id: String) {

@@ -145,7 +145,7 @@
                                 android:padding="17dip"
                                 android:text="@{listingvm.observableListing.contactNumber}"
                                 android:textColor="#000"
-                                android:textSize="14dp" />
+                                android:textSize="14sp" />
                         </TableRow>
 
                         <TableRow
@@ -245,8 +245,6 @@
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content">
 
-                            <!-- TODO include map here? or just text showing lat/lng -->
-
                             <TextView
 
                                 android:id="@+id/pickupLocationTitle"
@@ -269,7 +267,7 @@
                                 android:paddingBottom="8dp"
                                 android:stateListAnimator="@null"
                                 android:text="@string/viewMap_button"
-                                android:textColor="@color/colorPrimary"
+                                android:textColor="@color/black"
                                 android:textSize="15sp" />
                         </TableRow>
 
