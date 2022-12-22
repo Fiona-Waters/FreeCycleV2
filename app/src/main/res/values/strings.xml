@@ -89,6 +89,7 @@
     <string name="contact_email">Email</string>
     <string name="freecycle_contact_address">1 Main Street, Dublin</string>
     <string name="freecycle_contact_email">hello@freecycle.com</string>
-    <string name="intro">Welcome, please contact us using the details below...</string>
+    <string name="intro">Welcome, please contact us using the details below…</string>
+    <string name="night_mode">Night Mode</string>
 
 </resources>

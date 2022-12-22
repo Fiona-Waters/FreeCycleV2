@@ -1,5 +1,6 @@
 package ie.wit.myapplication.ui.home
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -21,9 +22,11 @@ import ie.wit.myapplication.ui.auth.Login
 import ie.wit.myapplication.databinding.ActivityMainBinding
 import ie.wit.myapplication.databinding.NavHeaderMainBinding
 import android.view.View
+import android.widget.Switch
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatDelegate
 import ie.wit.myapplication.firebase.FirebaseImageManager
 import ie.wit.myapplication.utils.showImagePicker
 import timber.log.Timber
@@ -41,6 +44,7 @@ class Home : AppCompatActivity() {
     private lateinit var intentLauncher: ActivityResultLauncher<Intent>
 
 
+    @SuppressLint("UseSwitchCompatOrMaterialCode")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -57,22 +61,34 @@ class Home : AppCompatActivity() {
 
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.addFragment, R.id.listFragment, R.id.aboutFragment
+                R.id.addFragment, R.id.listFragment, R.id.aboutFragment,
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
 
         val navView = homeBinding.navView
         navView.setupWithNavController(navController)
+
+        val btn = findViewById<Switch>(R.id.switch1)
+        btn?.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            } else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            }
+        }
         initNavHeader()
+
     }
 
     public override fun onStart() {
         super.onStart()
         loggedInViewModel = ViewModelProvider(this).get(LoggedInViewModel::class.java)
         loggedInViewModel.liveFirebaseUser.observe(this, Observer { firebaseUser ->
-            if (firebaseUser != null)
+            if (firebaseUser != null) {
+
                 updateNavHeader(firebaseUser)
+            }
         })
 
         loggedInViewModel.loggedOut.observe(this, Observer { loggedout ->

@@ -26,6 +26,8 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
 import com.squareup.picasso.Picasso
 import ie.wit.myapplication.R
 import ie.wit.myapplication.databinding.FragmentAddBinding
@@ -33,9 +35,11 @@ import ie.wit.myapplication.firebase.FirebaseImageManager
 import ie.wit.myapplication.models.FreecycleModel
 import ie.wit.myapplication.models.Location
 import ie.wit.myapplication.ui.auth.LoggedInViewModel
+import ie.wit.myapplication.utils.readImageUri
 import ie.wit.myapplication.utils.showImagePicker
 import timber.log.Timber
 import java.time.LocalDate
+import java.util.UUID
 
 class AddFragment : Fragment() {
 
@@ -48,6 +52,7 @@ class AddFragment : Fragment() {
 
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private val REQUEST_LOCATION_PERMISSION = 1
+    private lateinit var imageId: String
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,7 +65,7 @@ class AddFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         Timber.i("ON CREATE VIEW ADD FRAGMENT")
-
+        imageId = UUID.randomUUID().toString()
         _binding = FragmentAddBinding.inflate(inflater, container, false)
         val root: View = binding.root
         enableMyLocation()
@@ -142,25 +147,32 @@ class AddFragment : Fragment() {
             )
 
             if (listing.listingTitle.isNotEmpty() && listing.listingDescription.isNotEmpty() && listing.name.isNotEmpty()) {
-//
+
                 Timber.i("FirebaseUser : ${loggedInViewModel.liveFirebaseUser}")
-                addViewModel.addListing(
-                    loggedInViewModel.liveFirebaseUser, FreecycleModel(
-                        name = listing.name,
-                        contactNumber = listing.contactNumber,
-                        listingTitle = listing.listingTitle,
-                        listingDescription = listing.listingDescription,
-                        image = listing.image,
-                        itemAvailable = listing.itemAvailable,
-                        dateAvailable = listing.dateAvailable,
-                        email = loggedInViewModel.liveFirebaseUser.value?.email!!,
-                        profilePic = listing.profilePic,
-                        location = Location(
-                            listing.location?.lat!!,
-                            listing.location?.lng!!,
-                            listing.location?.zoom!!
-                        )
+
+                var newListing = FreecycleModel(
+                    name = listing.name,
+                    contactNumber = listing.contactNumber,
+                    listingTitle = listing.listingTitle,
+                    listingDescription = listing.listingDescription,
+                    // image = imageId,
+                    image = listing.image,
+                    itemAvailable = listing.itemAvailable,
+                    dateAvailable = listing.dateAvailable,
+                    email = loggedInViewModel.liveFirebaseUser.value?.email!!,
+                    profilePic = listing.profilePic,
+
                     )
+
+                if (listing.location?.zoom != 0f) {
+                    newListing.location = Location(
+                        listing.location?.lat!!,
+                        listing.location?.lng!!,
+                        listing.location?.zoom!!
+                    )
+                }
+                addViewModel.addListing(
+                    loggedInViewModel.liveFirebaseUser, newListing
                 )
                 Timber.i("ADDING LISTING %s", listing)
                 findNavController().navigateUp()
@@ -188,6 +200,13 @@ class AddFragment : Fragment() {
                         if (result.data != null) {
                             Timber.i("Got Result ${result.data!!.data}")
                             listing.image = result.data!!.data.toString()
+                            // upload image to firebase
+                            FirebaseImageManager.updateListingImage(
+                                imageId,
+                                readImageUri(result.resultCode, result.data),
+                                binding?.ListingImage!!,
+                                true
+                            )
                             Picasso.get().load(listing.image).into(binding.ListingImage)
                             binding.chooseImage.setText(R.string.edit_image)
                         } // end of if
@@ -197,6 +216,5 @@ class AddFragment : Fragment() {
                 }
             }
     }
-
 
 }

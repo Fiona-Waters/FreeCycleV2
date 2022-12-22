@@ -143,11 +143,11 @@ object FirebaseDBManager : FreecycleStore {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     snapshot.children.forEach {
                         //Update Users imageUri
-                        it.ref.child("profilepic").setValue(imageUri)
+                        it.ref.child("profilePic").setValue(imageUri)
                         //Update all listings that match 'it'
                         val listing = it.getValue(FreecycleModel::class.java)
                         allListings.child(listing!!.uid!!)
-                            .child("profilepic").setValue(imageUri)
+                            .child("profilePic").setValue(imageUri)
                     }
                 }
             })
