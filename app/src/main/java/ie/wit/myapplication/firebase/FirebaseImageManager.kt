@@ -27,7 +27,7 @@ object FirebaseImageManager {
         imageRef.metadata.addOnSuccessListener { //File Exists
             imageRef.downloadUrl.addOnCompleteListener { task ->
                 imageUri.value = task.result!!
-                FirebaseDBManager.updateImageRef(userid, imageUri.value.toString())
+          //      FirebaseDBManager.updateImageRef(userid, imageUri.value.toString())
             }
             //File Doesn't Exist
         }.addOnFailureListener {
