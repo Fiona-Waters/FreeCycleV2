@@ -9,7 +9,7 @@
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/blueMain"
+        android:background="@color/colorPrimaryDark"
         android:theme="@style/Theme.MyApplication.AppBarOverlay">
 
 
@@ -17,7 +17,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="@color/blueMain"
+            android:background="@color/colorPrimaryDark"
             app:popupTheme="@style/Theme.MyApplication.PopupOverlay" />
 
         <Switch
@@ -25,7 +25,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:background="@color/colorAccent"
+            android:background="@color/colorPrimary"
             android:text="@string/night_mode"
             android:textColor="@color/black"
             tools:ignore="UseSwitchCompatOrMaterialXml" />

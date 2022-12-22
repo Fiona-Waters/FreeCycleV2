@@ -1,9 +1,11 @@
 package ie.wit.myapplication.ui.home
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.AttributeSet
 import android.view.MenuItem
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -68,17 +70,16 @@ class Home : AppCompatActivity() {
 
         val navView = homeBinding.navView
         navView.setupWithNavController(navController)
+        initNavHeader()
 
         val btn = findViewById<Switch>(R.id.switch1)
-        btn?.setOnCheckedChangeListener { _, isChecked ->
+        btn.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
             } else {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
             }
         }
-        initNavHeader()
-
     }
 
     public override fun onStart() {

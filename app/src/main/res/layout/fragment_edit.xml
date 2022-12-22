@@ -1,219 +1,219 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
         <variable
-            name="listingvm"
-            type="ie.wit.myapplication.ui.edit.EditViewModel" />
+                name="listingvm"
+                type="ie.wit.myapplication.ui.edit.EditViewModel" />
     </data>
 
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="ui.edit.EditFragment">
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <com.google.android.material.appbar.AppBarLayout
-            android:id="@+id/appBarLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/colorAccent"
-            android:fitsSystemWindows="true"
-            app:elevation="0dip"
-            app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
-
-        </com.google.android.material.appbar.AppBarLayout>
-
-        <ScrollView
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/appBarLayout"
-            android:layout_marginTop="-1dp"
-            android:fillViewport="true">
+            tools:context="ui.edit.EditFragment">
 
-            <LinearLayout
+        <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/grey"
-                android:orientation="vertical">
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
-                <EditText
-                    android:id="@+id/name"
-                    android:layout_width="match_parent"
-                    android:layout_height="45dp"
-                    android:layout_margin="8dp"
-                    android:autofillHints=""
-                    android:hint="@string/hint_listingName"
-                    android:inputType="text"
-                    android:maxLength="40"
-                    android:maxLines="1"
-                    android:padding="8dp"
-                    android:text="@={listingvm.observableListing.name}"
-                    android:textColor="@color/black"
-                    android:textColorHint="@color/black"
-                    android:textSize="18sp" />
-
-                <EditText
-                    android:id="@+id/phoneNumber"
-                    android:layout_width="match_parent"
-                    android:layout_height="45dp"
-                    android:layout_margin="8dp"
-                    android:autofillHints=""
-                    android:hint="@string/hint_listingContactNumber"
-                    android:inputType="text"
-                    android:maxLength="15"
-                    android:maxLines="1"
-                    android:padding="8dp"
-                    android:text="@={listingvm.observableListing.contactNumber}"
-                    android:textColor="@color/black"
-                    android:textColorHint="@color/black"
-                    android:textSize="18sp" />
-
-                <EditText
-                    android:id="@+id/listingTitle"
-                    android:layout_width="match_parent"
-                    android:layout_height="45dp"
-                    android:layout_margin="8dp"
-                    android:autofillHints=""
-                    android:hint="@string/hint_listingTitle"
-                    android:inputType="text"
-                    android:maxLength="40"
-                    android:maxLines="1"
-                    android:padding="8dp"
-                    android:text="@={listingvm.observableListing.listingTitle}"
-                    android:textColor="@color/black"
-                    android:textColorHint="@color/black"
-                    android:textSize="18sp" />
-
-                <EditText
-                    android:id="@+id/listingDescription"
-                    android:layout_width="match_parent"
-                    android:layout_height="45dp"
-                    android:layout_margin="8dp"
-                    android:autofillHints=""
-                    android:hint="@string/hint_listingDescription"
-                    android:inputType="text"
-                    android:maxLength="250"
-                    android:maxLines="3"
-                    android:padding="8dp"
-                    android:text="@={listingvm.observableListing.listingDescription}"
-                    android:textColor="@color/black"
-                    android:textColorHint="@color/black"
-                    android:textSize="18sp" />
-
-
-                <TextView
-                    android:id="@+id/tv"
+            <com.google.android.material.appbar.AppBarLayout
+                    android:id="@+id/appBarLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:padding="10dp"
-                    android:text="@string/date_available"
-                    android:textColor="#101010"
-                    android:textSize="20sp" />
+                    android:background="@color/colorPrimary"
+                    android:fitsSystemWindows="true"
+                    app:elevation="0dip"
+                    app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-                <DatePicker
-                    android:id="@+id/datePicker"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:calendarViewShown="false"
-                    android:datePickerMode="spinner" />
+            </com.google.android.material.appbar.AppBarLayout>
 
-                <Button
-                    android:id="@+id/pickupLocation"
+            <ScrollView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="16dp"
-                    android:background="@color/colorAccent"
-                    android:paddingTop="8dp"
-                    android:paddingBottom="8dp"
-                    android:stateListAnimator="@null"
-                    android:text="@string/button_updateLocation"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="16sp" />
+                    android:layout_height="match_parent"
+                    android:layout_below="@id/appBarLayout"
+                    android:layout_marginTop="-1dp"
+                    android:fillViewport="true">
 
-                <Button
-                    android:id="@+id/chooseImage"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="16dp"
-                    android:background="@color/colorAccent"
-                    android:paddingTop="8dp"
-                    android:paddingBottom="8dp"
-                    android:text="@string/edit_image"
-                    android:textColor="@color/black"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
+                <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/colorPrimary"
+                        android:orientation="vertical">
+
+                    <EditText
+                            android:id="@+id/name"
+                            android:layout_width="match_parent"
+                            android:layout_height="45dp"
+                            android:layout_margin="8dp"
+                            android:autofillHints=""
+                            android:hint="@string/hint_listingName"
+                            android:inputType="text"
+                            android:maxLength="40"
+                            android:maxLines="1"
+                            android:padding="8dp"
+                            android:text="@={listingvm.observableListing.name}"
+                            android:textColor="@color/black"
+                            android:textColorHint="@color/black"
+                            android:textSize="18sp" />
+
+                    <EditText
+                            android:id="@+id/phoneNumber"
+                            android:layout_width="match_parent"
+                            android:layout_height="45dp"
+                            android:layout_margin="8dp"
+                            android:autofillHints=""
+                            android:hint="@string/hint_listingContactNumber"
+                            android:inputType="phone"
+                            android:maxLength="15"
+                            android:maxLines="1"
+                            android:padding="8dp"
+                            android:text="@={listingvm.observableListing.contactNumber}"
+                            android:textColor="@color/black"
+                            android:textColorHint="@color/black"
+                            android:textSize="18sp" />
+
+                    <EditText
+                            android:id="@+id/listingTitle"
+                            android:layout_width="match_parent"
+                            android:layout_height="45dp"
+                            android:layout_margin="8dp"
+                            android:autofillHints=""
+                            android:hint="@string/hint_listingTitle"
+                            android:inputType="text"
+                            android:maxLength="40"
+                            android:maxLines="1"
+                            android:padding="8dp"
+                            android:text="@={listingvm.observableListing.listingTitle}"
+                            android:textColor="@color/black"
+                            android:textColorHint="@color/black"
+                            android:textSize="18sp" />
+
+                    <EditText
+                            android:id="@+id/listingDescription"
+                            android:layout_width="match_parent"
+                            android:layout_height="45dp"
+                            android:layout_margin="8dp"
+                            android:autofillHints=""
+                            android:hint="@string/hint_listingDescription"
+                            android:inputType="text"
+                            android:maxLength="250"
+                            android:maxLines="3"
+                            android:padding="8dp"
+                            android:text="@={listingvm.observableListing.listingDescription}"
+                            android:textColor="@color/black"
+                            android:textColorHint="@color/black"
+                            android:textSize="18sp" />
 
 
-                <ImageView
-                    android:id="@+id/ListingImage"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="12dp"
-                    app:srcCompat="@mipmap/ic_launcher" />
+                    <TextView
+                            android:id="@+id/tv"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:padding="10dp"
+                            android:text="@string/date_available"
+                            android:textColor="#101010"
+                            android:textSize="20sp" />
+
+                    <DatePicker
+                            android:id="@+id/datePicker"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:calendarViewShown="false"
+                            android:datePickerMode="spinner" />
+
+                    <Button
+                            android:id="@+id/pickupLocation"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="16dp"
+                            android:background="@color/colorSecondary"
+                            android:paddingTop="8dp"
+                            android:paddingBottom="8dp"
+                            android:stateListAnimator="@null"
+                            android:text="@string/button_updateLocation"
+                            android:textColor="@color/black"
+                            android:textSize="16sp" />
+
+                    <Button
+                            android:id="@+id/chooseImage"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="16dp"
+                            android:background="@color/colorSecondary"
+                            android:paddingTop="8dp"
+                            android:paddingBottom="8dp"
+                            android:text="@string/edit_image"
+                            android:textColor="@color/black"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
 
 
-                <ToggleButton
-                    android:id="@+id/toggleButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:background="@drawable/selector"
-                    android:checked="true"
-                    android:padding="10dp"
-                    android:textOff="@string/toggle_textOff"
-                    android:textOn="@string/toggle_textOn"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    <ImageView
+                            android:id="@+id/ListingImage"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="12dp"
+                            app:srcCompat="@mipmap/ic_launcher" />
 
-                <Button
-                    android:id="@+id/btnUpdate"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="16dp"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="8dp"
-                    android:stateListAnimator="@null"
-                    android:text="@string/save_listing"
-                    android:textColor="@color/black"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
 
-                <Button
-                    android:id="@+id/deleteListing"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="16dp"
-                    android:backgroundTint="@color/dangerRed"
-                    android:paddingTop="8dp"
-                    android:paddingBottom="8dp"
-                    android:stateListAnimator="@null"
-                    android:text="@string/button_delete_listing"
-                    android:textColor="@color/black"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:visibility="invisible" />
+                    <ToggleButton
+                            android:id="@+id/toggleButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:background="@drawable/selector"
+                            android:checked="true"
+                            android:padding="10dp"
+                            android:textOff="@string/toggle_textOff"
+                            android:textOn="@string/toggle_textOn"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
 
-            </LinearLayout>
-        </ScrollView>
-    </RelativeLayout>
+                    <Button
+                            android:id="@+id/btnUpdate"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="16dp"
+                            android:paddingTop="10dp"
+                            android:paddingBottom="8dp"
+                            android:stateListAnimator="@null"
+                            android:background="@color/colorSecondary"
+                            android:text="@string/save_listing"
+                            android:textColor="@color/black"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+                    <Button
+                            android:id="@+id/deleteListing"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="16dp"
+                            android:backgroundTint="@color/dangerRed"
+                            android:paddingTop="8dp"
+                            android:paddingBottom="8dp"
+                            android:stateListAnimator="@null"
+                            android:text="@string/button_delete_listing"
+                            android:textColor="@color/black"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:visibility="invisible" />
+
+                </LinearLayout>
+            </ScrollView>
+        </RelativeLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
 
 
