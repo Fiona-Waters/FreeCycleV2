@@ -109,7 +109,8 @@ Night Mode/Dark Theme
 * https://www.geeksforgeeks.org/how-to-create-a-dark-mode-for-a-custom-android-app-in-kotlin/
 * https://developer.android.com/codelabs/basic-android-kotlin-training-change-app-theme#0
 
-
+Location permission bug fix
+* https://stackoverflow.com/questions/40760625/how-to-check-permission-in-fragment 
 
 
 
