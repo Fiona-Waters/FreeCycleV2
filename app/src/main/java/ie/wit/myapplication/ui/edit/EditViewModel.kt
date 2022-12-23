@@ -16,7 +16,7 @@ import android.content.Context
 class EditViewModel() : ViewModel() {
     private val listing = MutableLiveData<FreecycleModel>()
 
-    var observableListing: LiveData<FreecycleModel>
+    var observableListing: MutableLiveData<FreecycleModel>
         get() = listing
         set(value) {
             listing.value = value.value

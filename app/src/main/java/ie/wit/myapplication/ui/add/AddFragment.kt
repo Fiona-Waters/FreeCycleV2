@@ -97,11 +97,22 @@ class AddFragment : Fragment() {
     @SuppressLint("MissingPermission")
     private fun enableMyLocation() {
         if (!isPermissionGranted()) {
-            ActivityCompat.requestPermissions(
-                requireActivity(),
-                arrayOf<String>(Manifest.permission.ACCESS_FINE_LOCATION),
-                REQUEST_LOCATION_PERMISSION
-            )
+
+            val permissionLauncher = registerForActivityResult(
+                ActivityResultContracts.RequestPermission()
+            ) { isGranted ->
+                if (isGranted) {
+                    fusedLocationClient.lastLocation.addOnSuccessListener { location: android.location.Location? ->
+                        if (location != null) {
+                            listing.location = Location(location.latitude, location.longitude, 15f)
+                        }
+                    }
+                } else {
+                    // Do otherwise
+                }
+            }
+
+            permissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
         }
     }
 
@@ -187,6 +198,7 @@ class AddFragment : Fragment() {
         _binding = null
     }
 
+
     override fun onResume() {
         super.onResume()
 
@@ -201,12 +213,15 @@ class AddFragment : Fragment() {
                             Timber.i("Got Result ${result.data!!.data}")
                             listing.image = result.data!!.data.toString()
                             // upload image to firebase
+                            /*
                             FirebaseImageManager.updateListingImage(
                                 imageId,
                                 readImageUri(result.resultCode, result.data),
                                 binding?.ListingImage!!,
                                 true
                             )
+
+                             */
                             Picasso.get().load(listing.image).into(binding.ListingImage)
                             binding.chooseImage.setText(R.string.edit_image)
                         } // end of if

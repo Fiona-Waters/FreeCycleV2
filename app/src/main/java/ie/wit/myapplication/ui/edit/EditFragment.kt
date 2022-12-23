@@ -45,10 +45,10 @@ class EditFragment : Fragment() {
 
         editViewModel = ViewModelProvider(requireActivity()).get(EditViewModel::class.java)
         // calling get listing here as have validation in on resume in case of null values
-        editViewModel.getListing(
-            loggedInViewModel.liveFirebaseUser.value?.uid!!, args.listingid
-        )
-        editViewModel.observableListing.observe(viewLifecycleOwner, Observer { render() })
+//        editViewModel.getListing(
+//            loggedInViewModel.liveFirebaseUser.value?.uid!!, args.listingid
+//        )
+        editViewModel.observableListing.observe(viewLifecycleOwner, Observer { if(editViewModel.observableListing.value != null) {render()} })
 
         binding.chooseImage.setOnClickListener {
             showImagePicker(imageIntentLauncher)
@@ -70,7 +70,7 @@ class EditFragment : Fragment() {
 
 
         binding.btnUpdate.setOnClickListener {
-            val updatedListing = editViewModel.observableListing!!.value!!
+            val updatedListing = editViewModel.observableListing.value!!
             val dateSelected = LocalDate.of(
                 binding.datePicker.year, binding.datePicker.month + 1, binding.datePicker.dayOfMonth
             )
@@ -114,6 +114,11 @@ class EditFragment : Fragment() {
                 loggedInViewModel.liveFirebaseUser.value?.uid!!, args.listingid
             )
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        editViewModel.observableListing.value = null
     }
 
     private fun registerImagePickerCallback() {
